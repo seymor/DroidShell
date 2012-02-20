@@ -10,8 +10,8 @@ public class Vector2D implements Cloneable {
 	 * Member variables
 	 */
 
-	private float x;
-	private float y;
+	public float x;
+	public float y;
 
 	/*
 	 * Constructors
@@ -36,18 +36,10 @@ public class Vector2D implements Cloneable {
 	 * Getters and Setters
 	 */
 
-	public float getX() {
-		return x;
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
 	/*
 	 * Public methods
 	 */
-	
+
 	public Vector2D set(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -163,33 +155,29 @@ public class Vector2D implements Cloneable {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		
+
 		try {
 			Vector2D v = (Vector2D) o;
-			
-			if (Float.compare(v.x, this.x) == 0 && Float.compare(v.y, this.y) == 0)
+
+			if (Float.compare(v.x, this.x) == 0
+					&& Float.compare(v.y, this.y) == 0)
 				return true;
 			else
 				return false;
-			
+
 		} catch (ClassCastException e) {
 			Log.d(TAG, e.getMessage());
 		}
-		
+
 		return false;
 	}
-	
+
 	public String toString() {
-		return x + ":" + y;
+		return "(" + x + ":" + y + ")";
 	}
-	
+
 	public float[] toFloatArray() {
-		float[] array = new float[2];
-		
-		array[0] = x;
-		array[1] = y;
-		
-		return array;
+		return new float[] { this.x, this.y };
 	}
 
 }
