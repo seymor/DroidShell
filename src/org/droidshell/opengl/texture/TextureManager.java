@@ -11,20 +11,20 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-public class TextureLoader {
+public class TextureManager {
 
-	private static final String TAG = TextureLoader.class.getName();
+	private static final String TAG = TextureManager.class.getName();
 
 	private static HashMap<Integer, Texture> textures;
 	private static Context context;
 
 	public static void setContext(Context c) {
 		context = c;
+		
+		textures = new HashMap<Integer, Texture>();
 	}
 
 	public static void loadImages() {
-
-		textures = new HashMap<Integer, Texture>();
 
 		R.drawable drawableResources = new R.drawable();
 		Class<R.drawable> c = R.drawable.class;

@@ -8,7 +8,7 @@ public class ScreenManager {
 	public static int width;
 	public static int height;
 	
-	public static void setActivity(Activity a) {
+	public static void init(Activity a) {
 		DisplayMetrics dM = new DisplayMetrics();
 		a.getWindowManager().getDefaultDisplay().getMetrics(dM);
 		width = dM.widthPixels;
