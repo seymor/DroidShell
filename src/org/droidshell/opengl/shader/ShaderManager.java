@@ -77,7 +77,7 @@ public class ShaderManager {
 		
 	}
 	
-	public static int getVertexShader(Integer resourceId) {
+	public static int getVertexShader(final int resourceId) {
 		if (vertexShaders.containsKey(resourceId))
 			return vertexShaders.get(resourceId);
 
@@ -85,7 +85,7 @@ public class ShaderManager {
 		return -1;
 	}
 	
-	public static int getFragmentShader(Integer resourceId) {
+	public static int getFragmentShader(final int resourceId) {
 		if (fragmentShaders.containsKey(resourceId))
 			return fragmentShaders.get(resourceId);
 

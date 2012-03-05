@@ -1,0 +1,8 @@
+#Ignore directories and files
+/bin
+/gen
+/.classpath
+/.project
+/default.properties
+/proguard.cfg
+/ReadMe

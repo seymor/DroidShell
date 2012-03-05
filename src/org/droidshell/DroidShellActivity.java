@@ -1,5 +1,6 @@
 package org.droidshell;
 
+import org.droidshell.opengl.shader.ShaderAttributeManager;
 import org.droidshell.opengl.shader.ShaderManager;
 import org.droidshell.opengl.texture.TextureManager;
 import org.droidshell.screen.ScreenManager;
@@ -14,13 +15,6 @@ public class DroidShellActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        TextureManager.setContext(this);
-        //TextureManager.loadImages();
-        
-        ScreenManager.init(this);
-        
-        ShaderManager.setContext(this);
         
         view = new DroidShellView(this);
         
@@ -39,6 +33,17 @@ public class DroidShellActivity extends Activity {
         super.onResume();
         
         view.onResume();
+    
+        
+        TextureManager.setContext(this);
+        //TextureManager.loadImages();
+        
+        ScreenManager.init(this);
+        
+        ShaderManager.setContext(this);
+        
+        ShaderAttributeManager.init();
+        
     }
 
 }

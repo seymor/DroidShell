@@ -2,13 +2,11 @@ package org.droidshell.node;
 
 import java.util.ArrayList;
 
-import org.droidshell.math.Color;
 import org.droidshell.math.Vector2D;
 
 public class Node {
 	
 	public Vector2D coords;
-	public Color color = Color.BLACK;
 	
 	public boolean isVisible = true;
 	public boolean isUpdatable = true;
@@ -17,11 +15,6 @@ public class Node {
 	
 	private Node parentNode;
 	private ArrayList<Node> childrenList;
-	
-	public Node(Vector2D coords, Color color) {
-		this.coords = coords;
-		this.color = color;
-	}
 	
 	public Node(Vector2D coords) {
 		this.coords = coords;
@@ -41,6 +34,15 @@ public class Node {
 	
 	public void setChildrenList(ArrayList<Node> childrenList) {
 		this.childrenList = childrenList;
+	}
+	
+	public void update(boolean childrenUpdate) {
+		//TODO: use modifiers
+		
+		if (childrenUpdate)
+			for(int i=0; i < childrenList.size(); i++)
+				childrenList.get(i).update(true);
+			
 	}
 
 }
