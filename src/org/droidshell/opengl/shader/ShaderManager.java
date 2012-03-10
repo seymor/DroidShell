@@ -18,7 +18,10 @@ public class ShaderManager {
 	private static HashMap<Integer, Integer> vertexShaders;
 	private static HashMap<Integer, Integer> fragmentShaders;
 	
-	private static String readShader(InputStream inputStream) {
+	public static final int VERTEX_SHADER = GLES20.GL_VERTEX_SHADER;
+	public static final int FRAGMENT_SHADER = GLES20.GL_FRAGMENT_SHADER;
+	
+	private static String read(InputStream inputStream) {
 		
 		StringBuffer shader = new StringBuffer();
 		
@@ -38,7 +41,7 @@ public class ShaderManager {
 		
 	}
 	
-	private static void createShader(final int resourceId, String shader, final int glShaderType) {
+	private static void create(final int resourceId, String shader, final int glShaderType) {
 		
 		int shaderId = GLES20.glCreateShader(glShaderType);
 		GLES20.glShaderSource(shaderId, shader);
@@ -55,26 +58,26 @@ public class ShaderManager {
 			return;
 		}
 		
-		if (glShaderType == GLES20.GL_VERTEX_SHADER)
+		if (glShaderType == VERTEX_SHADER)
 			vertexShaders.put(resourceId, shaderId);
-		else if (glShaderType == GLES20.GL_FRAGMENT_SHADER)
+		else if (glShaderType == FRAGMENT_SHADER)
 			fragmentShaders.put(resourceId, shaderId);
 		
 	}
 	
-	public static void setContext(Context c) {
+	public static void build(final int resourceId, final int glShaderType) {
+		
+		InputStream inputStream = context.getResources().openRawResource(resourceId);
+		String shader = read(inputStream);
+		create(resourceId, shader, glShaderType);
+		
+	}
+	
+	public static void init(Context c) {
 		context = c;
 		
 		vertexShaders = new HashMap<Integer, Integer>();
 		fragmentShaders = new HashMap<Integer, Integer>();
-	}
-	
-	public static void loadShader(final int resourceId, final int glShaderType) {
-		
-		InputStream inputStream = context.getResources().openRawResource(resourceId);
-		String shader = readShader(inputStream);
-		createShader(resourceId, shader, glShaderType);
-		
 	}
 	
 	public static int getVertexShader(final int resourceId) {

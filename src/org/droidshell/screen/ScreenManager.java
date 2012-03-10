@@ -4,17 +4,31 @@ import org.droidshell.math.Vector2D;
 
 import android.app.Activity;
 import android.util.DisplayMetrics;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class ScreenManager {
+	
+	private static Activity activity;
 	
 	public static int width;
 	public static int height;
 	
 	public static void init(Activity a) {
+		activity = a;
 		DisplayMetrics dM = new DisplayMetrics();
-		a.getWindowManager().getDefaultDisplay().getMetrics(dM);
+		activity.getWindowManager().getDefaultDisplay().getMetrics(dM);
 		width = dM.widthPixels;
 		height = dM.heightPixels;
+	}
+	
+	public static void fullScreen() {
+		/*
+		 * You can set this in AndroidManifest:
+		 * android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+		 */
+		activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
 	
 	public static Vector2D convertCoordinatesToScreen2D(Vector2D coords) {

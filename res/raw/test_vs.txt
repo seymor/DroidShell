@@ -1,7 +1,11 @@
 attribute vec4 vPosition;
 attribute vec4 vColor;
+attribute vec2 vTexture;
+uniform mat3 uModelMatrix;
 varying vec4 aColor;
+varying vec2 aTexture;
 void main(){
 	aColor = vColor;
+	aTexture = vTexture;
 	gl_Position = vPosition;
 }

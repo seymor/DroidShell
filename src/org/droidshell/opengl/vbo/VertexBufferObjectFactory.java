@@ -14,9 +14,9 @@ public class VertexBufferObjectFactory {
 	}
 	
 	public static void build(String name) throws Exception {
-		if(vbos.containsKey(name))
+		if(vbos.containsKey(name)) {
 			throw new Exception("VBO already exists!");
-		else
+		} else
 			vbos.put(name, new VertexBufferObject(name));
 	}
 	

@@ -21,7 +21,7 @@ public class Color implements Cloneable {
 	public static final Color MAGENTA = new Color(1.0f,0.0f,1.0f,1.0f);
 	public static final Color YELLOW = new Color(1.0f,1.0f,0.0f,1.0f);
 	
-	public static final int FLOAT_TO_INT = 255;
+	public static final int NORM_TO_INT = 255;
 	
 	
 	/*
@@ -102,14 +102,14 @@ public class Color implements Cloneable {
 				this.a * rgba.a);
 	}
 
-	public Color multiplicate(float s) {
+	public Color multiply(float s) {
 		this.r *= s;
 		this.g *= s;
 		this.b *= s;
 		return this;
 	}
 
-	public Color multiplicateN(float s) {
+	public Color multiplyN(float s) {
 		return new Color(this.r * s, this.g * s, this.b * s);
 	}
 
@@ -164,12 +164,12 @@ public class Color implements Cloneable {
 		return false;
 	}
 	
-	public static final float intToFloat(int intvalue) {
-		return intvalue / FLOAT_TO_INT;
+	public static final float intToNorm(int intValue256) {
+		return intValue256 / NORM_TO_INT;
 	}
 	
-	public static final int floatToInt(float floatvalue) {
-		return (int) floatvalue * FLOAT_TO_INT;
+	public static final int normToInt(float floatValue) {
+		return (int) floatValue * NORM_TO_INT;
 	}
 
 	public String toString() {
@@ -177,7 +177,7 @@ public class Color implements Cloneable {
 	}
 
 	public float[] toFloatArray() {
-		return new float[] { this.r, this.g, this.b, this.a };
+		return new float[] { r, g, b, a };
 	}
 
 }

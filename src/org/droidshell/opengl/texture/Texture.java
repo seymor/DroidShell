@@ -5,13 +5,17 @@ import android.graphics.Bitmap;
 public class Texture {
 
 	public Bitmap bitmap;
-	public Integer ID;
+	public int id;
 	
-	public Texture(Bitmap bitmap, Integer ID){
+	public Texture(Bitmap bitmap, int id){
 		
 		this.bitmap = bitmap;
-		this.ID = ID;
+		this.id = id;
 		
+	}
+	
+	public String toString() {
+		return "(TEXT_" + id + ")";
 	}
 	
 }

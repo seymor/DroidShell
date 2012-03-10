@@ -1,12 +1,13 @@
 package org.droidshell.node;
 
-import java.util.ArrayList;
-
+import org.droidshell.math.Matrix;
 import org.droidshell.math.Vector2D;
 
-public class Node {
+public abstract class Node implements iUpdatable, iDrawable, iTransformable{
 	
 	public Vector2D coords;
+	
+	public Matrix modelMatrix = Matrix.IDENTITY;
 	
 	public boolean isVisible = true;
 	public boolean isUpdatable = true;
@@ -14,7 +15,7 @@ public class Node {
 	public int zIndex = 0;
 	
 	private Node parentNode;
-	private ArrayList<Node> childrenList;
+	private NodeList<Node> childrenList;
 	
 	public Node(Vector2D coords) {
 		this.coords = coords;
@@ -28,21 +29,18 @@ public class Node {
 		this.parentNode = parentNode;
 	}
 	
-	public ArrayList<Node> getChildrenList() {
+	public NodeList<Node> getChildrenList() {
 		return childrenList;
 	}
 	
-	public void setChildrenList(ArrayList<Node> childrenList) {
+	public void setChildrenList(NodeList<Node> childrenList) {
 		this.childrenList = childrenList;
 	}
 	
 	public void update(boolean childrenUpdate) {
-		//TODO: use modifiers
-		
 		if (childrenUpdate)
 			for(int i=0; i < childrenList.size(); i++)
 				childrenList.get(i).update(true);
-			
 	}
 
 }

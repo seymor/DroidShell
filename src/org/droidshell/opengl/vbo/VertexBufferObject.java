@@ -9,6 +9,9 @@ public class VertexBufferObject {
 	
 	private static final String TAG = VertexBufferObject.class.getName();
 
+	public static final int TEXTURE_SAMPLER_HANDLER = 0;
+	public static final int MODEL_MATRIX_HANDLER = 1;
+	
 	public final String name;
 
 	public FloatBuffer vertexBuffer;
@@ -19,6 +22,7 @@ public class VertexBufferObject {
 	public final int[] glTypes = new int[3];
 	public final boolean[] isNormalized = new boolean[3];
 	private int[] handlers = new int[3];
+	private int[] uniformHandlers = new int[3];
 
 	public VertexBufferObject(String name) {
 
@@ -28,11 +32,12 @@ public class VertexBufferObject {
 			glTypes[i] = -1;
 			isNormalized[i] = false;
 			handlers[i] = -1;
+			uniformHandlers[i] = -1;
 		}
 
 	}
 	
-	public VertexBufferObject addBuffer(int bufferType, FloatBuffer buffer, int size, int glType, boolean isNormalized) {
+	public VertexBufferObject add(int bufferType, FloatBuffer buffer, int size, int glType, boolean isNormalized) {
 		
 		switch(bufferType) {
 		
@@ -66,31 +71,58 @@ public class VertexBufferObject {
 		return this;
 	}
 	
-	public int getHandler(int bufferType) throws Exception {
+	public int getAttributeHandler(int bufferType) throws Exception {
 		if (bufferType > 2 || bufferType < 0) {
 			throw new Exception("Unknown buffer type! (0,1,2 are valid)");
 		}
 		return this.handlers[bufferType];
 	}
 	
-	public void setHandler(int bufferType, int handler) throws Exception {
+	public int getUniformHandler(int uniformType) throws Exception {
+		if (uniformType > 2 || uniformType < 0) {
+			throw new Exception("Unknown uniform type! (0,1 are valid)");
+		}
+		return this.uniformHandlers[uniformType];
+	}
+	
+	public void setAttributeHandler(int bufferType, int handler) throws Exception {
 		if (bufferType > 2 || bufferType < 0) {
 			throw new Exception("Unknown buffer type! (0,1,2 are valid)");
 		}
 		this.handlers[bufferType] = handler;
 	}
 	
-	public void prepareBuffers(int vertexStride, int colorStride, int textureStride) {
-		int[] strides = new int[] { vertexStride, colorStride, textureStride };
+	public void setUniformHandler(int uniformType, int handler) throws Exception {
+		if (uniformType > 2 || uniformType < 0) {
+			throw new Exception("Unknown uniform type! (0,1,2 are valid)");
+		}
+		this.uniformHandlers[uniformType] = handler;
+	}
+	
+	public void prepare() {
 		FloatBuffer[] buffers = new FloatBuffer[] { vertexBuffer, colorBuffer, textureBuffer };
 		
 		for(int i=0; i<3; i++) {
 			if(handlers[i] != -1) {
-				GLES20.glVertexAttribPointer(handlers[i], sizes[i], glTypes[i], isNormalized[i], strides[i], buffers[i]);
+				GLES20.glVertexAttribPointer(handlers[i], sizes[i], glTypes[i], isNormalized[i], 0, buffers[i]);
 		        GLES20.glEnableVertexAttribArray(handlers[i]);
 			}
-			
 		}
+		
+	}
+	
+	public void prepareTexture(int textureId) throws Exception {
+		if(textureBuffer != null) {
+			GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+			GLES20.glUniform1i(uniformHandlers[0], 0);
+		}else {
+			throw new Exception("Texture not set!");
+		}
+	}
+	
+	public void prepareModelMatrix(float[] mx) {
+		GLES20.glUniformMatrix3fv(uniformHandlers[1], 1, false, mx, 0);
 	}
 
 	public void draw(final int glPrimitive, final int offset, final int count) {
