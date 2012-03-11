@@ -2,12 +2,15 @@ package org.droidshell.node;
 
 import org.droidshell.math.Matrix;
 import org.droidshell.math.Vector2D;
+import org.droidshell.node.interfaces.iDrawable;
+import org.droidshell.node.interfaces.iTransformable;
+import org.droidshell.node.interfaces.iUpdatable;
 
 public abstract class Node implements iUpdatable, iDrawable, iTransformable{
 	
 	public Vector2D coords;
 	
-	public Matrix modelMatrix = Matrix.IDENTITY;
+	public Matrix modelMatrix = Matrix.identity();
 	
 	public boolean isVisible = true;
 	public boolean isUpdatable = true;

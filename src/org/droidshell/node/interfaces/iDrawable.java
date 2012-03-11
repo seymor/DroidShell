@@ -1,4 +1,4 @@
-package org.droidshell.node;
+package org.droidshell.node.interfaces;
 
 public interface iDrawable {
 	

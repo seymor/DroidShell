@@ -122,7 +122,7 @@ public class VertexBufferObject {
 	}
 	
 	public void prepareModelMatrix(float[] mx) {
-		GLES20.glUniformMatrix3fv(uniformHandlers[1], 1, false, mx, 0);
+		GLES20.glUniformMatrix4fv(uniformHandlers[1], 1, false, mx, 0);
 	}
 
 	public void draw(final int glPrimitive, final int offset, final int count) {

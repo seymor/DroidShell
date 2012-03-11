@@ -7,96 +7,34 @@ public class Matrix {
 	private static final String TAG = Matrix.class.getName();
 
 	/*
-	 * Static final variables
-	 */
-
-	public static final Matrix IDENTITY = new Matrix();
-	public static final Matrix NIL = new Matrix(0);
-	public static final Matrix ONE = new Matrix(1);
-
-	/*
 	 * Member variables
 	 */
 
-	public float m11;
-	public float m12;
-	public final float m13 = 0;
-
-	public float m21;
-	public float m22;
-	public final float m23 = 0;
-
-	public float m31;
-	public float m32;
-	public final float m33 = 1;
+	private float[] m;
 
 	/*
 	 * Constructors
 	 */
 
 	public Matrix() {
-
-		this.m11 = 1;
-		this.m12 = 0;
-
-		this.m21 = 0;
-		this.m22 = 1;
-
-		this.m31 = 0;
-		this.m32 = 0;
-
+		this.m = new float[16];
+		for (int i = 0; i < 16; i++) {
+			if (i % 5 == 0)
+				this.m[i] = 1.0f;
+			else
+				this.m[i] = 0.0f;
+		}
 	}
 
 	public Matrix(float m) {
+		this.m = new float[16];
 
-		this.m11 = m;
-		this.m12 = m;
-
-		this.m21 = m;
-		this.m22 = m;
-
-		this.m31 = m;
-		this.m32 = m;
+		for (int i = 0; i < 16; i++)
+			this.m[i] = m;
 	}
 
-	public Matrix(float m11, float m12, float m21, float m22) {
-
-		this.m11 = m11;
-		this.m12 = m12;
-
-		this.m21 = m21;
-		this.m22 = m22;
-
-		this.m31 = 0;
-		this.m32 = 0;
-
-	}
-
-	public Matrix(float m31, float m32) {
-
-		this.m11 = 1;
-		this.m12 = 0;
-
-		this.m21 = 0;
-		this.m22 = 1;
-
-		this.m31 = m31;
-		this.m32 = m32;
-
-	}
-
-	public Matrix(float m11, float m12, float m21, float m22, float m31,
-			float m32) {
-
-		this.m11 = m11;
-		this.m12 = m12;
-
-		this.m21 = m21;
-		this.m22 = m22;
-
-		this.m31 = m31;
-		this.m32 = m32;
-
+	public Matrix(float[] m4x4) {
+		this.m = m4x4;
 	}
 
 	/*
@@ -107,99 +45,114 @@ public class Matrix {
 	 * Public methods
 	 */
 
-	public Vector2D multiply(Vector2D v) {
+	public static Matrix identity() {
+		return new Matrix();
+	}
 
-		float xN = this.m11 * v.x + this.m21 * v.y + this.m31 * 1;
-		float yN = this.m12 * v.x + this.m22 * v.y + this.m32 * 1;
+	public Vector2D multiply(Vector2D v) {
+		float xN = m[0] * v.x + m[4] * v.y + m[8] * 1;
+		float yN = m[1] * v.x + m[5] * v.y + m[9] * 1;
 
 		return new Vector2D(xN, yN);
 	}
 
 	public Matrix multiply(Matrix m) {
-
-		this.m11 = this.m11 * m.m11 + this.m12 * m.m21 + this.m31 * m.m31;
-		this.m12 = this.m11 * m.m12 + this.m12 * m.m22 + this.m32 * m.m31;
-
-		this.m21 = this.m21 * m.m11 + this.m22 * m.m21 + this.m23 * m.m31;
-		this.m22 = this.m21 * m.m12 + this.m22 * m.m22 + this.m32 * m.m31;
-
-		this.m31 = this.m31 * m.m11 + this.m32 * m.m21 + this.m33 * m.m31;
-		this.m32 = this.m31 * m.m12 + this.m32 * m.m22 + this.m32 * m.m31;
+		float[] result = new float[16];
+		android.opengl.Matrix.multiplyMM(result, 0, this.toFloatArray(), 0,
+				m.toFloatArray(), 0);
+		this.m = result;
 
 		return this;
 	}
 
 	public Matrix multiplyN(Matrix m) {
+		float[] result = new float[16];
+		android.opengl.Matrix.multiplyMM(result, 0, this.toFloatArray(), 0,
+				m.toFloatArray(), 0);
 
-		float mN11 = this.m11 * m.m11 + this.m12 * m.m21 + this.m31 * m.m31;
-		float mN12 = this.m11 * m.m12 + this.m12 * m.m22 + this.m32 * m.m31;
-
-		float mN21 = this.m21 * m.m11 + this.m22 * m.m21 + this.m23 * m.m31;
-		float mN22 = this.m21 * m.m12 + this.m22 * m.m22 + this.m32 * m.m31;
-
-		float mN31 = this.m31 * m.m11 + this.m32 * m.m21 + this.m33 * m.m31;
-		float mN32 = this.m31 * m.m12 + this.m32 * m.m22 + this.m32 * m.m31;
-
-		return new Matrix(mN11, mN12, mN21, mN22, mN31, mN32);
+		return new Matrix(result);
 	}
 
 	public Matrix add(Matrix m) {
-
-		this.m11 += m.m11;
-		this.m12 += m.m12;
-
-		this.m21 += m.m21;
-		this.m22 += m.m22;
-
-		this.m31 += m.m31;
-		this.m32 += m.m32;
+		for (int i = 0; i < 16; i++)
+			this.m[i] += m.m[i];
 
 		return this;
-
 	}
 
 	public Matrix addN(Matrix m) {
+		Matrix n = new Matrix(0);
+		for (int i = 0; i < 16; i++)
+			n.m[i] = m.m[i];
 
-		float mN11 = this.m11 + m.m11;
-		float mN12 = this.m12 + m.m12;
-
-		float mN21 = this.m21 + m.m21;
-		float mN22 = this.m22 + m.m22;
-
-		float mN31 = this.m31 + m.m31;
-		float mN32 = this.m32 + m.m32;
-
-		return new Matrix(mN11, mN12, mN21, mN22, mN31, mN32);
-
+		return n;
 	}
 
-	public static Matrix getRotationMatrix(float angleDeg) {
+	public static Matrix projMatrix(float left, float right, float bottom,
+			float top, float near, float far) {
+		float[] matrix = new float[16];
+		android.opengl.Matrix.frustumM(matrix, 0, left, right, bottom, top,
+				near, far);
+
+		return new Matrix(matrix);
+	}
+
+	public static Matrix lookAtMatrix(float eyeX, float eyeY, float eyeZ,
+			float centerX, float centerY, float centerZ, float upX, float upY,
+			float upZ) {
+		float[] matrix = new float[16];
+		android.opengl.Matrix.setLookAtM(matrix, 0, eyeX, eyeY, eyeZ, centerX,
+				centerY, centerZ, upX, upY, upZ);
+
+		return new Matrix(matrix);
+	}
+
+	public static Matrix rotationMatrix(float angleDeg) {
 		float angle = MathHelper.degreeToRadian(angleDeg);
+		Matrix m = new Matrix();
 
-		return new Matrix(MathHelper.cos(angle), MathHelper.sin(angle),
-				-MathHelper.sin(angle), MathHelper.cos(angle));
+		m.m[0] = MathHelper.cos(angle);
+		m.m[1] = -MathHelper.sin(angle);
+		m.m[4] = MathHelper.sin(angle);
+		m.m[5] = MathHelper.cos(angle);
+
+		return m;
 	}
 
-	public static Matrix getTranslationMatrix(float translX, float translY) {
-		return new Matrix(translX, translY);
+	public static Matrix translationMatrix(float translX, float translY) {
+		Matrix m = new Matrix();
+		m.m[8] = translX;
+		m.m[9] = translY;
+		
+		return m;
 	}
 
-	public static Matrix getScaleMatrix(float scaleX, float scaleY) {
-		return new Matrix(scaleX, 0, 0, scaleY);
+	public static Matrix scaleMatrix(float scaleX, float scaleY) {
+		Matrix m = new Matrix();
+		m.m[0] = scaleX;
+		m.m[5] = scaleY;
+		
+		return m;
+	}
+
+	public void translate(float translX, float translY) {
+		this.multiply(Matrix.translationMatrix(translX, translY));
+	}
+
+	public void rotate(float angleDeg) {
+		this.multiply(Matrix.rotationMatrix(angleDeg));
+	}
+
+	public void scale(float scaleX, float scaleY) {
+		this.multiply(Matrix.scaleMatrix(scaleX, scaleY));
 	}
 
 	public int hashCode() {
 		int hash = 13;
 
-		hash += 29 * hash + Float.floatToIntBits(m11);
-		hash += 29 * hash + Float.floatToIntBits(m12);
-		hash += 29 * hash + Float.floatToIntBits(m13);
-		hash += 29 * hash + Float.floatToIntBits(m21);
-		hash += 29 * hash + Float.floatToIntBits(m22);
-		hash += 29 * hash + Float.floatToIntBits(m23);
-		hash += 29 * hash + Float.floatToIntBits(m31);
-		hash += 29 * hash + Float.floatToIntBits(m32);
-		hash += 29 * hash + Float.floatToIntBits(m33);
+		for(int i = 0; i < 16; i++)
+			hash += 29 * hash + Float.floatToIntBits(m[i]);
+		
 		return hash;
 	}
 
@@ -220,15 +173,13 @@ public class Matrix {
 		try {
 			Matrix m = (Matrix) o;
 
-			if (Float.compare(m.m11, this.m11) == 0
-					&& Float.compare(m.m12, this.m12) == 0
-					&& Float.compare(m.m21, this.m21) == 0
-					&& Float.compare(m.m22, this.m22) == 0
-					&& Float.compare(m.m31, this.m31) == 0
-					&& Float.compare(m.m32, this.m32) == 0)
-				return true;
-			else
-				return false;
+			boolean isEqual = true;
+			for(int i = 0; i < 16; i++) {
+				if (Float.compare(m.m[i], this.m[i]) != 0)
+					isEqual = false;
+			}
+			
+			return isEqual ? true : false;
 
 		} catch (ClassCastException e) {
 			Log.d(TAG, e.getMessage());
@@ -238,12 +189,22 @@ public class Matrix {
 	}
 
 	public String toString() {
-		return "(" + m11 + "," + m12 + "," + m13 + "," + m21 + "," + m22 + ","
-				+ m23 + "," + m31 + "," + m32 + "," + m33 + ")";
+		String out = "(";
+		for(int i = 0; i < 16; i++)
+			out += m[i] + ",";
+		
+		out += ")";
+		
+		return out;
 	}
 
 	public float[] toFloatArray() {
-		return new float[] { m11, m12, m13, m21, m22, m23, m31, m32, m33 };
+		float[] f = new float[16];
+		for(int i = 0; i < 16; i++) {
+			f[i] = m[i];
+		}
+		
+		return f;
 	}
 
 }

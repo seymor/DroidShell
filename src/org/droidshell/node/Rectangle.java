@@ -5,7 +5,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import org.droidshell.math.Color;
-import org.droidshell.math.Matrix;
 import org.droidshell.math.Vector2D;
 import org.droidshell.opengl.shader.ShaderAttributeManager;
 import org.droidshell.opengl.shader.ShaderProgram;
@@ -141,17 +140,17 @@ public class Rectangle extends Node {
 
 	@Override
 	public void translate(float tX, float tY) {
-		this.modelMatrix.add(Matrix.getTranslationMatrix(tX, tY));
+		this.modelMatrix.translate(tX, tY);
 	}
 
 	@Override
 	public void scale(float sX, float sY) {
-		this.modelMatrix.add(Matrix.getScaleMatrix(sX, sY));
+		this.modelMatrix.scale(sX, sY);
 	}
 
 	@Override
-	public void rotate(float angleD) {
-		this.modelMatrix.add(Matrix.getRotationMatrix(angleD));
+	public void rotate(float angle) {
+		this.modelMatrix.rotate(angle);
 	}
 
 	@Override

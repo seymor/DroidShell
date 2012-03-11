@@ -2,6 +2,9 @@ package org.droidshell.node;
 
 import java.util.ArrayList;
 
+import org.droidshell.node.interfaces.iDrawable;
+import org.droidshell.node.interfaces.iUpdatable;
+
 import android.util.Log;
 
 public class NodeList<E extends iUpdatable & iDrawable> extends ArrayList<E> {

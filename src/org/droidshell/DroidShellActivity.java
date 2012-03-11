@@ -36,6 +36,7 @@ public class DroidShellActivity extends Activity {
         super.onPause();
         
         view.onPause();
+        
     }
     
     @Override
@@ -45,6 +46,13 @@ public class DroidShellActivity extends Activity {
         view.onResume();
         TextureManager.setContext(this);   
        
+    }
+    
+    @Override
+    public void onBackPressed() {
+            super.onBackPressed();
+            this.finish();
+            android.os.Process.killProcess(android.os.Process.myPid()) ;
     }
 
 }
