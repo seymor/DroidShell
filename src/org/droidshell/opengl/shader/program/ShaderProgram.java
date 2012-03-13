@@ -1,4 +1,4 @@
-package org.droidshell.opengl.shader;
+package org.droidshell.opengl.shader.program;
 
 import android.opengl.GLES20;
 import android.util.Log;
@@ -19,7 +19,7 @@ public class ShaderProgram {
 		
 	}
 	
-	public int create() {
+	public ShaderProgram create() {
 		
 		this.id = GLES20.glCreateProgram();
 		GLES20.glAttachShader(this.id, this.vertexShaderId);
@@ -32,12 +32,12 @@ public class ShaderProgram {
 		
 		if(linkStatus[0] == GLES20.GL_FALSE)
 		{
-			Log.d(TAG, "Program link failed!");
+			Log.e(TAG, "Program link failed!");
 			GLES20.glDeleteProgram(this.id);
-			return -1;
+			return null;
 		}
 		
-		return this.id;
+		return this;
 	}
 	
 	public void use() {

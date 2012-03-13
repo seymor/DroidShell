@@ -4,19 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
+
+import org.droidshell.exception.ClassNotInitializedException;
 
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
-public class ShaderManager {
+public class ShaderFactory {
 	
-	private static final String TAG = ShaderManager.class.getName();
+	private static final String TAG = ShaderFactory.class.getName();
 	private static Context context;
-	
-	private static HashMap<Integer, Integer> vertexShaders;
-	private static HashMap<Integer, Integer> fragmentShaders;
 	
 	public static final int VERTEX_SHADER = GLES20.GL_VERTEX_SHADER;
 	public static final int FRAGMENT_SHADER = GLES20.GL_FRAGMENT_SHADER;
@@ -58,42 +56,27 @@ public class ShaderManager {
 			return;
 		}
 		
-		if (glShaderType == VERTEX_SHADER)
-			vertexShaders.put(resourceId, shaderId);
-		else if (glShaderType == FRAGMENT_SHADER)
-			fragmentShaders.put(resourceId, shaderId);
-		
-	}
-	
-	public static void build(final int resourceId, final int glShaderType) {
-		
-		InputStream inputStream = context.getResources().openRawResource(resourceId);
-		String shader = read(inputStream);
-		create(resourceId, shader, glShaderType);
+		try {
+			ShaderDirectory.put(glShaderType, resourceId, shaderId);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 		
 	}
 	
 	public static void init(Context c) {
 		context = c;
+		ShaderDirectory.init();
+	}
+	
+	public static void build(final int resourceId, final int glShaderType) {
+		if(context == null)
+			throw new ClassNotInitializedException("Context not set!");
 		
-		vertexShaders = new HashMap<Integer, Integer>();
-		fragmentShaders = new HashMap<Integer, Integer>();
-	}
-	
-	public static int getVertexShader(final int resourceId) {
-		if (vertexShaders.containsKey(resourceId))
-			return vertexShaders.get(resourceId);
-
-		Log.e(TAG, "Failed to get vertex shader: " + resourceId);
-		return -1;
-	}
-	
-	public static int getFragmentShader(final int resourceId) {
-		if (fragmentShaders.containsKey(resourceId))
-			return fragmentShaders.get(resourceId);
-
-		Log.e(TAG, "Failed to get fragment shader: " + resourceId);
-		return -1;
-	}
+		InputStream inputStream = context.getResources().openRawResource(resourceId);
+		String shader = read(inputStream);
+		create(resourceId, shader, glShaderType);
+		
+	}	
 
 }

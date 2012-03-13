@@ -1,8 +1,9 @@
 package org.droidshell;
 
-import org.droidshell.opengl.shader.ShaderAttributeManager;
-import org.droidshell.opengl.shader.ShaderManager;
-import org.droidshell.opengl.texture.TextureManager;
+import org.droidshell.opengl.shader.ShaderFactory;
+import org.droidshell.opengl.shader.program.ShaderProgramFactory;
+import org.droidshell.opengl.shader.program.input.ShaderProgramInputManager;
+import org.droidshell.opengl.texture.TextureFactory;
 import org.droidshell.opengl.vbo.VertexBufferObjectFactory;
 import org.droidshell.screen.ScreenManager;
 
@@ -20,9 +21,13 @@ public class DroidShellActivity extends Activity {
         ScreenManager.init(this);
         ScreenManager.fullScreen();
         
-        ShaderManager.init(this);
+        ShaderProgramInputManager.init();
         
-        ShaderAttributeManager.init();
+        ShaderFactory.init(this);
+        
+        ShaderProgramFactory.init();
+        
+        TextureFactory.init(this);
         
         VertexBufferObjectFactory.init();
         
@@ -43,9 +48,7 @@ public class DroidShellActivity extends Activity {
     public void onResume() {
         super.onResume();
         
-        view.onResume();
-        TextureManager.setContext(this);   
-       
+        view.onResume();       
     }
     
     @Override

@@ -5,11 +5,14 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import org.droidshell.math.Color;
+import org.droidshell.math.Matrix;
 import org.droidshell.math.Vector2D;
-import org.droidshell.opengl.shader.ShaderAttributeManager;
-import org.droidshell.opengl.shader.ShaderProgram;
+import org.droidshell.opengl.shader.program.ShaderProgram;
+import org.droidshell.opengl.shader.program.input.ShaderProgramInputManager;
 import org.droidshell.opengl.vbo.VertexBufferObject;
+import org.droidshell.opengl.vbo.VertexBufferObjectDirectory;
 import org.droidshell.opengl.vbo.VertexBufferObjectFactory;
+import org.droidshell.render.RenderContext;
 
 import android.opengl.GLES20;
 import android.util.Log;
@@ -27,12 +30,30 @@ public class Rectangle extends Node {
 	public static final int COLOR_BUFFER_ID = 1;
 
 	protected VertexBufferObject vbo;
-	protected ShaderProgram program;
-
 	protected String vboId;
 
 	public float width;
 	public float height;
+	public ShaderProgram program;
+	
+	public Rectangle(float width, float height, Color color) {
+		super();
+		
+		this.width = width;
+		this.height = height;
+		
+		createVBO(coords, width, height, color);
+	}
+	
+	public Rectangle(float width, float height, Color color, boolean noVBO) {
+		super();
+		
+		this.width = width;
+		this.height = height;
+		
+		if (!noVBO) 
+			createVBO(coords, width, height, color);
+	}
 
 	public Rectangle(Vector2D center, float width, float height, Color color) {
 		super(center);
@@ -83,7 +104,7 @@ public class Rectangle extends Node {
 			Log.e(TAG, "Failed to create VBO: " + e.getMessage());
 		}
 
-		vbo = VertexBufferObjectFactory.getVBO(vboId);
+		vbo = VertexBufferObjectDirectory.get(vboId);
 
 		vbo.add(POSITION_BUFFER_ID,
 				this.createBuffer(this.createVertexArray(center, width, height)),
@@ -106,10 +127,6 @@ public class Rectangle extends Node {
 		return buffer;
 	}
 
-	public void addShaderProgram(ShaderProgram program) {
-		this.program = program;
-	}
-
 	/*
 	 * bufferType = [position, color]
 	 */
@@ -124,17 +141,27 @@ public class Rectangle extends Node {
 			throw new Exception("ShaderProgram not set for this Rectangle!");
 
 		try {
-			ShaderAttributeManager.addAttribute(program.id, attributeName);
+			ShaderProgramInputManager.addAttribute(program.id, attributeName);
 			vbo.setAttributeHandler(bufferType,
-					ShaderAttributeManager.getAttributeHandler(attributeName));
+					ShaderProgramInputManager.getAttributeHandler(attributeName));
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 		}
 	}
 
-	public void draw() {
+	@Override
+	public void render(RenderContext renderContext) {
 		vbo.prepare();
-		vbo.prepareModelMatrix(this.modelMatrix.toFloatArray());
+		
+		GLES20.glUniformMatrix4fv(renderContext.modelMatrixHandler, 1, false,
+				modelMatrix.toFloatArray(), 0);
+
+		Matrix modelViewProjMatrix = renderContext.camera.projMatrix.multiplyN(
+				renderContext.camera.viewMatrix).multiplyN(modelMatrix);
+		
+		GLES20.glUniformMatrix4fv(renderContext.modelViewProjMatrixHandler, 1, false,
+				modelViewProjMatrix.toFloatArray(), 0);
+		
 		vbo.draw(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 	}
 
@@ -154,7 +181,7 @@ public class Rectangle extends Node {
 	}
 
 	@Override
-	public void update() {
+	public void update(long gameTime) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,11 +2,11 @@ package org.droidshell.node;
 
 import org.droidshell.math.Matrix;
 import org.droidshell.math.Vector2D;
-import org.droidshell.node.interfaces.iDrawable;
+import org.droidshell.node.interfaces.iRenderable;
 import org.droidshell.node.interfaces.iTransformable;
 import org.droidshell.node.interfaces.iUpdatable;
 
-public abstract class Node implements iUpdatable, iDrawable, iTransformable{
+public abstract class Node implements iUpdatable, iRenderable, iTransformable{
 	
 	public Vector2D coords;
 	
@@ -17,27 +17,19 @@ public abstract class Node implements iUpdatable, iDrawable, iTransformable{
 	
 	public int zIndex = 0;
 	
-	private Node parentNode;
-	private NodeList<Node> childrenList;
+	public Node parentNode;
+	public NodeList<Node> childrenList;
+	
+	public Node() {
+		coords = new Vector2D(0,0);
+	}
 	
 	public Node(Vector2D coords) {
 		this.coords = coords;
 	}
 	
-	public Node getParentNode() {
-		return parentNode;
-	}
-	
-	public void setParentNode(Node parentNode) {
-		this.parentNode = parentNode;
-	}
-	
-	public NodeList<Node> getChildrenList() {
-		return childrenList;
-	}
-	
-	public void setChildrenList(NodeList<Node> childrenList) {
-		this.childrenList = childrenList;
+	public Vector2D getPosition() {
+		return modelMatrix.multiply(coords);
 	}
 	
 	public void update(boolean childrenUpdate) {

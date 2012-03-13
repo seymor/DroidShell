@@ -1,9 +1,9 @@
 package org.droidshell.opengl.texture;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 
 import org.droidshell.R;
+import org.droidshell.exception.ClassNotInitializedException;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -11,20 +11,21 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-public class TextureManager {
+public class TextureFactory {
 
-	private static final String TAG = TextureManager.class.getName();
-
-	private static HashMap<Integer, Texture> textures;
+	private static final String TAG = TextureFactory.class.getName();
+	
 	private static Context context;
 
-	public static void setContext(Context c) {
+	public static void init(Context c) {
 		context = c;
-		
-		textures = new HashMap<Integer, Texture>();
+		TextureDirectory.init();
 	}
 
-	public static void loadImages() {
+	public static void buildTextures() {
+		
+		if(context == null)
+			throw new ClassNotInitializedException("Context not set!");
 
 		R.drawable drawableResources = new R.drawable();
 		Class<R.drawable> c = R.drawable.class;
@@ -52,7 +53,7 @@ public class TextureManager {
 
 				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, texture.bitmap, 0);
 
-				textures.put(resourceId, texture);
+				TextureDirectory.put(resourceId, texture);
 
 			} catch (Exception e) {
 				Log.e(TAG, e.getMessage());
@@ -60,14 +61,6 @@ public class TextureManager {
 			}
 		}
 
-	}
-
-	public static Texture getTexture(Integer id) {
-		if (textures.containsKey(id))
-			return textures.get(id);
-
-		Log.e(TAG, "Failed to get texture " + id);
-		return null;
 	}
 
 }
