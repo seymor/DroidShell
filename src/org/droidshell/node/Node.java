@@ -6,6 +6,12 @@ import org.droidshell.node.interfaces.iRenderable;
 import org.droidshell.node.interfaces.iTransformable;
 import org.droidshell.node.interfaces.iUpdatable;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public abstract class Node implements iUpdatable, iRenderable, iTransformable{
 	
 	public Vector2D coords;

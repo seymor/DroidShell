@@ -2,6 +2,12 @@ package org.droidshell.math;
 
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class Color implements Cloneable {
 
 	private static final String TAG = Color.class.getName();
@@ -9,21 +15,20 @@ public class Color implements Cloneable {
 	/*
 	 * Static final variables
 	 */
-	
-	public static final Color WHITE = new Color(1.0f,1.0f,1.0f,1.0f);
-	public static final Color BLACK = new Color(0.0f,0.0f,0.0f,1.0f);
-	public static final Color RED = new Color(1.0f,0.0f,0.0f,1.0f);
-	public static final Color GREEN = new Color(0.0f,1.0f,0.0f,1.0f);
-	public static final Color BLUE = new Color(0.0f,0.0f,1.0f,1.0f);
-	public static final Color GREY = new Color(0.5f,0.5f,0.5f,1.0f);
-	
-	public static final Color CYAN = new Color(0.0f,1.0f,1.0f,1.0f);
-	public static final Color MAGENTA = new Color(1.0f,0.0f,1.0f,1.0f);
-	public static final Color YELLOW = new Color(1.0f,1.0f,0.0f,1.0f);
-	
+
+	public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+	public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+	public static final Color RED = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+	public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+	public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+	public static final Color GREY = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+
+	public static final Color CYAN = new Color(0.0f, 1.0f, 1.0f, 1.0f);
+	public static final Color MAGENTA = new Color(1.0f, 0.0f, 1.0f, 1.0f);
+	public static final Color YELLOW = new Color(1.0f, 1.0f, 0.0f, 1.0f);
+
 	public static final int NORM_TO_INT = 255;
-	
-	
+
 	/*
 	 * Member variables
 	 */
@@ -38,10 +43,10 @@ public class Color implements Cloneable {
 	 */
 
 	public Color() {
-		this.r = 0;
-		this.g = 0;
-		this.b = 0;
-		this.a = 1.0f;
+		r = 0;
+		g = 0;
+		b = 0;
+		a = 1.0f;
 	}
 
 	public Color(float r, float g, float b) {
@@ -59,10 +64,10 @@ public class Color implements Cloneable {
 	}
 
 	public Color(Color rgba) {
-		this.r = rgba.r;
-		this.g = rgba.g;
-		this.b = rgba.b;
-		this.a = rgba.a;
+		r = rgba.r;
+		g = rgba.g;
+		b = rgba.b;
+		a = rgba.a;
 	}
 
 	/*
@@ -90,37 +95,36 @@ public class Color implements Cloneable {
 	}
 
 	public Color add(Color rgba) {
-		this.r += rgba.r;
-		this.g += rgba.g;
-		this.b += rgba.b;
-		this.a += rgba.a;
+		r += rgba.r;
+		g += rgba.g;
+		b += rgba.b;
+		a += rgba.a;
 		return this;
 	}
 
 	public Color addN(Color rgba) {
-		return new Color(this.r + rgba.r, this.g * rgba.g, this.b * rgba.b,
-				this.a * rgba.a);
+		return new Color(r + rgba.r, g * rgba.g, b * rgba.b, a * rgba.a);
 	}
 
 	public Color multiply(float s) {
-		this.r *= s;
-		this.g *= s;
-		this.b *= s;
+		r *= s;
+		g *= s;
+		b *= s;
 		return this;
 	}
 
 	public Color multiplyN(float s) {
-		return new Color(this.r * s, this.g * s, this.b * s);
+		return new Color(r * s, g * s, b * s);
 	}
 
-	public Color multiplicate(Color rgba) {
-		this.r *= rgba.r;
-		this.g *= rgba.g;
-		this.b *= rgba.b;
-		this.a *= rgba.a;
+	public Color multiply(Color rgba) {
+		r *= rgba.r;
+		g *= rgba.g;
+		b *= rgba.b;
+		a *= rgba.a;
 		return this;
 	}
-	
+
 	public int hashCode() {
 		int hash = 13;
 
@@ -131,13 +135,12 @@ public class Color implements Cloneable {
 		return hash;
 	}
 
-
 	@Override
 	public Color clone() {
 		try {
 			return (Color) super.clone();
 		} catch (CloneNotSupportedException e) {
-			Log.d(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 		return null;
 	}
@@ -149,25 +152,25 @@ public class Color implements Cloneable {
 		try {
 			Color rgba = (Color) o;
 
-			if (Float.compare(rgba.r, this.r) == 0
-					&& Float.compare(rgba.g, this.g) == 0
-					&& Float.compare(rgba.b, this.b) == 0
-					&& Float.compare(rgba.a, this.a) == 0)
+			if (Float.compare(rgba.r, r) == 0
+					&& Float.compare(rgba.g, g) == 0
+					&& Float.compare(rgba.b, b) == 0
+					&& Float.compare(rgba.a, a) == 0)
 				return true;
 			else
 				return false;
 
 		} catch (ClassCastException e) {
-			Log.d(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 
 		return false;
 	}
-	
+
 	public static final float intToNorm(int intValue256) {
 		return intValue256 / NORM_TO_INT;
 	}
-	
+
 	public static final int normToInt(float floatValue) {
 		return (int) floatValue * NORM_TO_INT;
 	}

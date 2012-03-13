@@ -2,6 +2,12 @@ package org.droidshell.math;
 
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class Matrix {
 
 	private static final String TAG = Matrix.class.getName();
@@ -17,12 +23,12 @@ public class Matrix {
 	 */
 
 	public Matrix() {
-		this.m = new float[16];
+		m = new float[16];
 		for (int i = 0; i < 16; i++) {
 			if (i % 5 == 0)
-				this.m[i] = 1.0f;
+				m[i] = 1.0f;
 			else
-				this.m[i] = 0.0f;
+				m[i] = 0.0f;
 		}
 	}
 
@@ -34,7 +40,7 @@ public class Matrix {
 	}
 
 	public Matrix(float[] m4x4) {
-		this.m = m4x4;
+		m = m4x4;
 	}
 
 	/*
@@ -161,7 +167,7 @@ public class Matrix {
 		try {
 			return (Matrix) super.clone();
 		} catch (CloneNotSupportedException e) {
-			Log.d(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 		return null;
 	}
@@ -182,7 +188,7 @@ public class Matrix {
 			return isEqual ? true : false;
 
 		} catch (ClassCastException e) {
-			Log.d(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 
 		return false;

@@ -11,6 +11,12 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class TextureFactory {
 
 	private static final String TAG = TextureFactory.class.getName();

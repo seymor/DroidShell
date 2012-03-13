@@ -22,6 +22,12 @@ import android.util.Log;
 //		|      |
 //	  C	*------* D
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class Rectangle extends Node {
 
 	private static final String TAG = Rectangle.class.getName();

@@ -11,6 +11,12 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class ShaderFactory {
 	
 	private static final String TAG = ShaderFactory.class.getName();

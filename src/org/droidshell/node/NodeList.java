@@ -8,6 +8,12 @@ import org.droidshell.render.RenderContext;
 
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class NodeList<E extends iUpdatable & iRenderable> extends ArrayList<E> {
 	
 	private static final long serialVersionUID = 1L;

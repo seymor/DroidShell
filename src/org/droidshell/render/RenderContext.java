@@ -6,6 +6,12 @@ import org.droidshell.opengl.shader.program.input.ShaderProgramInputManager;
 
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class RenderContext {
 	
 	private static final String TAG = RenderContext.class.getName();

@@ -7,6 +7,12 @@ import org.droidshell.exception.ClassNotInitializedException;
 import android.opengl.GLES20;
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class ShaderProgramInputManager {
 
 	private static final String TAG = ShaderProgramInputManager.class.getName();
