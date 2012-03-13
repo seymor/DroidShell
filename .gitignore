@@ -6,3 +6,5 @@
 /default.properties
 /proguard.cfg
 /ReadMe
+
+/gen/org/droidshell/R.java
