@@ -4,14 +4,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import org.droidshell.math.Color;
-import org.droidshell.math.Matrix;
-import org.droidshell.math.Vector2D;
-import org.droidshell.opengl.shader.program.ShaderProgram;
-import org.droidshell.opengl.shader.program.input.ShaderProgramInputManager;
-import org.droidshell.opengl.vbo.VertexBufferObject;
-import org.droidshell.opengl.vbo.VertexBufferObjectDirectory;
-import org.droidshell.opengl.vbo.VertexBufferObjectFactory;
+import org.droidshell.lang.math.Color;
+import org.droidshell.lang.math.Matrix;
+import org.droidshell.lang.math.Vector2D;
+import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
+import org.droidshell.opengl.vertexbuffer.VertexBuffer;
+import org.droidshell.opengl.vertexbuffer.VertexBufferDirectory;
+import org.droidshell.opengl.vertexbuffer.VertexBufferFactory;
 import org.droidshell.render.RenderContext;
 
 import android.opengl.GLES20;
@@ -31,93 +30,67 @@ import android.util.Log;
 public class Rectangle extends Node {
 
 	private static final String TAG = Rectangle.class.getName();
-	private static final String VBORECT = "DS_RECT";
-	public static final int POSITION_BUFFER_ID = 0;
-	public static final int COLOR_BUFFER_ID = 1;
 
-	protected VertexBufferObject vbo;
-	protected String vboId;
+	protected VertexBuffer positionBuffer;
+	protected VertexBuffer colorBuffer;
 
 	public float width;
 	public float height;
-	public ShaderProgram program;
-	
-	public Rectangle(float width, float height, Color color) {
+
+	public Rectangle(float width, float height) {
 		super();
-		
+
 		this.width = width;
 		this.height = height;
-		
-		createVBO(coords, width, height, color);
+
+		createPositionBuffer();
+		createColorBuffer();
 	}
-	
-	public Rectangle(float width, float height, Color color, boolean noVBO) {
-		super();
-		
+
+	public Rectangle(float width, float height, Color color) {
+		super(color);
+
 		this.width = width;
 		this.height = height;
-		
-		if (!noVBO) 
-			createVBO(coords, width, height, color);
+
+		createPositionBuffer();
+		createColorBuffer();
+	}
+
+	public Rectangle(Vector2D center, float width, float height) {
+		super(center);
+		this.width = width;
+		this.height = height;
+
+		createPositionBuffer();
+		createColorBuffer();
 	}
 
 	public Rectangle(Vector2D center, float width, float height, Color color) {
-		super(center);
+		super(center, color);
 		this.width = width;
 		this.height = height;
-		
-		createVBO(center, width, height, color);
+
+		createPositionBuffer();
+		createColorBuffer();
 	}
 
-	public Rectangle(Vector2D center, float width, float height, Color color,
-			boolean noVBO) {
-		super(center);
-		
-		this.width = width;
-		this.height = height;
-		
-		if (!noVBO) 
-			createVBO(center, width, height, color);
-
-	}
-
-	protected float[] createVertexArray(Vector2D center, float width,
-			float height) {
-		float[] vertexArray = new float[] { center.x - width / 2,
-				center.y + height / 2, center.x + width / 2,
-				center.y + height / 2, center.x - width / 2,
-				center.y - height / 2, center.x + width / 2,
-				center.y - height / 2 };
+	private float[] createPositionArray() {
+		float[] vertexArray = new float[] { coords.x - width / 2,
+				coords.y + height / 2, coords.x + width / 2,
+				coords.y + height / 2, coords.x - width / 2,
+				coords.y - height / 2, coords.x + width / 2,
+				coords.y - height / 2 };
 
 		return vertexArray;
 	}
 
-	protected float[] createColorArray(Color color) {
+	private float[] createColorArray() {
 		float[] colorArray = new float[] { color.r, color.g, color.b, color.a,
 				color.r, color.g, color.b, color.a, color.r, color.g, color.b,
 				color.a, color.r, color.g, color.b, color.a, };
 
 		return colorArray;
-	}
-	
-	protected void createVBO(Vector2D center, float width, float height, Color color) {
-		vboId = VBORECT + ":" + center.toString() + ":(" + width + "," + height
-				+ "):" + color.toString() + ":(TEXT_NO)";
-
-		try {
-			VertexBufferObjectFactory.build(vboId);
-		} catch (Exception e) {
-			Log.e(TAG, "Failed to create VBO: " + e.getMessage());
-		}
-
-		vbo = VertexBufferObjectDirectory.get(vboId);
-
-		vbo.add(POSITION_BUFFER_ID,
-				this.createBuffer(this.createVertexArray(center, width, height)),
-				2, GLES20.GL_FLOAT, false)
-			.add(COLOR_BUFFER_ID,
-				this.createBuffer(this.createColorArray(color)), 4,
-				GLES20.GL_FLOAT, true);
 	}
 
 	protected FloatBuffer createBuffer(float[] array) {
@@ -133,42 +106,33 @@ public class Rectangle extends Node {
 		return buffer;
 	}
 
-	/*
-	 * bufferType = [position, color]
-	 */
-	public void bindShaderAttribute(int bufferType, String attributeName)
-			throws Exception {
+	private void createPositionBuffer() {
+		String vbId = "POSITION" + ":" + coords.toString() + ":" + "(" + width
+				+ "," + height + ")";
 
-		if (bufferType > 2 || bufferType < 0) {
-			throw new Exception("Unknown buffer type! (0,1,2 are valid)");
-		}
-		
-		if (program == null)
-			throw new Exception("ShaderProgram not set for this Rectangle!");
+		FloatBuffer buffer = this.createBuffer(this.createPositionArray());
 
 		try {
-			ShaderProgramInputManager.addAttribute(program.id, attributeName);
-			vbo.setAttributeHandler(bufferType,
-					ShaderProgramInputManager.getAttributeHandler(attributeName));
+			VertexBufferFactory.build(vbId, buffer, 2, GLES20.GL_FLOAT, false);
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 		}
+
+		positionBuffer = VertexBufferDirectory.get(vbId);
 	}
 
-	@Override
-	public void render(RenderContext renderContext) {
-		vbo.prepare();
-		
-		GLES20.glUniformMatrix4fv(renderContext.modelMatrixHandler, 1, false,
-				modelMatrix.toFloatArray(), 0);
+	private void createColorBuffer() {
+		String vbId = "COLOR" + ":" + color.toString();
 
-		Matrix modelViewProjMatrix = renderContext.camera.projMatrix.multiplyN(
-				renderContext.camera.viewMatrix).multiplyN(modelMatrix);
-		
-		GLES20.glUniformMatrix4fv(renderContext.modelViewProjMatrixHandler, 1, false,
-				modelViewProjMatrix.toFloatArray(), 0);
-		
-		vbo.draw(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+		FloatBuffer buffer = this.createBuffer(this.createColorArray());
+
+		try {
+			VertexBufferFactory.build(vbId, buffer, 4, GLES20.GL_FLOAT, true);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
+
+		colorBuffer = VertexBufferDirectory.get(vbId);
 	}
 
 	@Override
@@ -189,7 +153,24 @@ public class Rectangle extends Node {
 	@Override
 	public void update(long gameTime) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void render(RenderContext renderContext) {
+		ShaderProgramInput sI = renderContext.shaderInput;
+
+		sI.prepareVertex(sI.ATTRIBUTE_POS, positionBuffer);
+		sI.prepareVertex(sI.ATTRIBUTE_COLOR, colorBuffer);
+
+		Matrix modelViewProjMatrix = renderContext.camera.projMatrix.multiplyN(
+				renderContext.camera.viewMatrix).multiplyN(modelMatrix);
+
+		sI.prepareMatrix(sI.UNIFORM_MODELMATRIX, modelMatrix.toFloatArray());
+		sI.prepareMatrix(sI.UNIFORM_MODELVIEWPROJMATRIX,
+				modelViewProjMatrix.toFloatArray());
+
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 	}
 
 }

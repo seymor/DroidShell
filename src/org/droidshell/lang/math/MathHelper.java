@@ -1,4 +1,4 @@
-package org.droidshell.math;
+package org.droidshell.lang.math;
 
 import java.util.Random;
 

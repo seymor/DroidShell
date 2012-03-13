@@ -1,7 +1,8 @@
 package org.droidshell.node;
 
-import org.droidshell.math.Matrix;
-import org.droidshell.math.Vector2D;
+import org.droidshell.lang.math.Color;
+import org.droidshell.lang.math.Matrix;
+import org.droidshell.lang.math.Vector2D;
 import org.droidshell.node.interfaces.iRenderable;
 import org.droidshell.node.interfaces.iTransformable;
 import org.droidshell.node.interfaces.iUpdatable;
@@ -15,6 +16,7 @@ import org.droidshell.node.interfaces.iUpdatable;
 public abstract class Node implements iUpdatable, iRenderable, iTransformable{
 	
 	public Vector2D coords;
+	public Color color;
 	
 	public Matrix modelMatrix = Matrix.identity();
 	
@@ -28,10 +30,22 @@ public abstract class Node implements iUpdatable, iRenderable, iTransformable{
 	
 	public Node() {
 		coords = new Vector2D(0,0);
+		color = Color.WHITE;
 	}
 	
 	public Node(Vector2D coords) {
 		this.coords = coords;
+		this.color = Color.WHITE;
+	}
+	
+	public Node(Color color) {
+		this.coords = new Vector2D(0,0);
+		this.color = color;
+	}
+	
+	public Node(Vector2D coords, Color color) {
+		this.coords = coords;
+		this.color = color;
 	}
 	
 	public Vector2D getPosition() {

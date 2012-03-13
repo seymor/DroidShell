@@ -2,9 +2,7 @@ package org.droidshell.render;
 
 import org.droidshell.camera.Camera;
 import org.droidshell.opengl.shader.program.ShaderProgram;
-import org.droidshell.opengl.shader.program.input.ShaderProgramInputManager;
-
-import android.util.Log;
+import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -14,34 +12,23 @@ import android.util.Log;
  */
 public class RenderContext {
 	
+	@SuppressWarnings("unused")
 	private static final String TAG = RenderContext.class.getName();
-
+	
 	public Camera camera;
 	public ShaderProgram shaderProgram;
-	public int modelMatrixHandler;
-	public int modelViewProjMatrixHandler;
+	public ShaderProgramInput shaderInput;
 
 	public RenderContext(Camera camera, ShaderProgram shaderProgram) {
 		this.camera = camera;
 		this.shaderProgram = shaderProgram;
+		shaderInput = new ShaderProgramInput(shaderProgram);
 	}
 	
-	public void bindModelMatrixHandler(String uniformName) {
-		try {
-			ShaderProgramInputManager.addUniform(shaderProgram.id, uniformName);
-			modelMatrixHandler = ShaderProgramInputManager.getUniformHandler(uniformName);
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
-		}
-	}
-	
-	public void bindModelViewProjMatrixHandler(String uniformName) {
-		try {
-			ShaderProgramInputManager.addUniform(shaderProgram.id, uniformName);
-			modelViewProjMatrixHandler = ShaderProgramInputManager.getUniformHandler(uniformName);
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
-		}
+	public RenderContext(Camera camera, ShaderProgram shaderProgram, ShaderProgramInput shaderInput) {
+		this.camera = camera;
+		this.shaderProgram = shaderProgram;
+		this.shaderInput = shaderInput;
 	}
 
 }

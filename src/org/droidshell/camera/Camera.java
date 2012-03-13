@@ -1,7 +1,7 @@
 package org.droidshell.camera;
 
-import org.droidshell.math.Matrix;
-import org.droidshell.math.Vector3D;
+import org.droidshell.lang.math.Matrix;
+import org.droidshell.lang.math.Vector3D;
 import org.droidshell.screen.ScreenManager;
 
 import android.util.Log;

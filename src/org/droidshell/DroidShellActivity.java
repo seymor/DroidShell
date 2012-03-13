@@ -2,9 +2,8 @@ package org.droidshell;
 
 import org.droidshell.opengl.shader.ShaderFactory;
 import org.droidshell.opengl.shader.program.ShaderProgramFactory;
-import org.droidshell.opengl.shader.program.input.ShaderProgramInputManager;
 import org.droidshell.opengl.texture.TextureFactory;
-import org.droidshell.opengl.vbo.VertexBufferObjectFactory;
+import org.droidshell.opengl.vertexbuffer.VertexBufferFactory;
 import org.droidshell.screen.ScreenManager;
 
 import android.app.Activity;
@@ -21,15 +20,13 @@ public class DroidShellActivity extends Activity {
         ScreenManager.init(this);
         ScreenManager.fullScreen();
         
-        ShaderProgramInputManager.init();
-        
         ShaderFactory.init(this);
         
         ShaderProgramFactory.init();
         
         TextureFactory.init(this);
         
-        VertexBufferObjectFactory.init();
+        VertexBufferFactory.init();
         
         view = new DroidShellView(this);
         

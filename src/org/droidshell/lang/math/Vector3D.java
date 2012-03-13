@@ -1,4 +1,4 @@
-package org.droidshell.math;
+package org.droidshell.lang.math;
 
 import android.util.Log;
 
@@ -204,7 +204,7 @@ public class Vector3D {
 	}
 
 	public String toString() {
-		return "(" + x + ":" + y + ":" + z + ")";
+		return "(" + x + "," + y + "," + z + ")";
 	}
 
 	public float[] toFloatArray() {

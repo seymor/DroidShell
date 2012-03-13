@@ -1,4 +1,4 @@
-package org.droidshell.math;
+package org.droidshell.lang.math;
 
 import android.util.Log;
 
@@ -176,7 +176,7 @@ public class Color implements Cloneable {
 	}
 
 	public String toString() {
-		return "(" + r + ":" + g + ":" + b + ":" + a + ")";
+		return "(" + r + "," + g + "," + b + "," + a + ")";
 	}
 
 	public float[] toFloatArray() {

@@ -1,4 +1,4 @@
-package org.droidshell.math;
+package org.droidshell.lang.math;
 
 import android.util.Log;
 
@@ -184,7 +184,7 @@ public class Vector2D implements Cloneable {
 	}
 
 	public String toString() {
-		return "(" + x + ":" + y + ")";
+		return "(" + x + "," + y + ")";
 	}
 
 	public float[] toFloatArray() {

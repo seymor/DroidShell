@@ -4,10 +4,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.droidshell.camera.Camera;
-import org.droidshell.math.Matrix;
-import org.droidshell.math.Vector3D;
+import org.droidshell.lang.math.Matrix;
+import org.droidshell.lang.math.Vector3D;
 import org.droidshell.node.NodeList;
-import org.droidshell.node.sprite.AnimatedSprite;
 import org.droidshell.node.sprite.Sprite;
 import org.droidshell.opengl.GLStateManager;
 import org.droidshell.opengl.shader.ShaderDirectory;
@@ -15,18 +14,17 @@ import org.droidshell.opengl.shader.ShaderFactory;
 import org.droidshell.opengl.shader.program.ShaderProgram;
 import org.droidshell.opengl.shader.program.ShaderProgramDirectory;
 import org.droidshell.opengl.shader.program.ShaderProgramFactory;
+import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
 import org.droidshell.opengl.texture.TextureFactory;
-import org.droidshell.opengl.vbo.VertexBufferObject;
 import org.droidshell.render.RenderContext;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
 
 public class DroidShellRenderer implements Renderer {
 
-	private NodeList<AnimatedSprite> sprites;
-	private AnimatedSprite sprite;
+	private NodeList<Sprite> sprites;
+	private Sprite sprite;
 	private Camera camera;
 	private float angle = 0;
 	private RenderContext renderContext;
@@ -41,7 +39,6 @@ public class DroidShellRenderer implements Renderer {
 		//sprite.rotate(angle++);
 		//sprite.scale(0.8f, 0.8f);
 
-		sprites.updateAll(System.currentTimeMillis());
 		sprites.renderAll(renderContext);
 	}
 
@@ -57,9 +54,9 @@ public class DroidShellRenderer implements Renderer {
 		camera = new Camera(new Vector3D(0, 0, -1), new Vector3D(0, 0, 0), -1, 1, 1,
 				100);
 
-		sprites = new NodeList<AnimatedSprite>();
+		sprites = new NodeList<Sprite>();
 
-		sprite = new AnimatedSprite(27, 20, 1.0f, 1.2f, R.drawable.biz, true);
+		sprite = new Sprite(0.5f, 0.5f, R.drawable.icon);
 
 		ShaderFactory.build(R.raw.test_vs, ShaderFactory.VERTEX_SHADER);
 		ShaderFactory.build(R.raw.test_fs, ShaderFactory.FRAGMENT_SHADER);
@@ -71,26 +68,16 @@ public class DroidShellRenderer implements Renderer {
 		ShaderProgram program = ShaderProgramDirectory.get("basic");
 
 		renderContext = new RenderContext(camera, program);
-		renderContext.bindModelMatrixHandler("uModelMatrix");
-		renderContext.bindModelViewProjMatrixHandler("uModelViewProjMatrix");
+		ShaderProgramInput sI = renderContext.shaderInput;
+		sI.bindAttribute(sI.ATTRIBUTE_POS, "vPosition");
+		sI.bindAttribute(sI.ATTRIBUTE_COLOR, "vColor");
+		sI.bindAttribute(sI.ATTRIBUTE_TEXCOORD, "vTexture");
+		
+		sI.bindUniform(sI.UNIFORM_MODELMATRIX, "uModelMatrix");
+		sI.bindUniform(sI.UNIFORM_MODELVIEWPROJMATRIX, "uModelViewProjMatrix");
+		sI.bindUniform(sI.UNIFORM_TEXTURE_SAMPLER, "uTextureSampler");
+		
 		renderContext.shaderProgram.use();
-		
-		sprite.program = program;
-
-		try {
-			sprite.bindShaderAttribute(Sprite.POSITION_BUFFER_ID, "vPosition");
-			sprite.bindShaderAttribute(Sprite.COLOR_BUFFER_ID, "vColor");
-			sprite.bindShaderAttribute(Sprite.TEXTURE_BUFFER_ID, "vTexture");
-
-			sprite.bindShaderUniform(
-					VertexBufferObject.TEXTURE_SAMPLER_HANDLER,
-					"uTextureSampler");
-
-		} catch (Exception e) {
-			Log.e("SAM", e.getMessage());
-		}
-
-		
 
 		sprites.push(sprite);
 

@@ -8,6 +8,7 @@ package org.droidshell.opengl.shader.program;
  */
 public class ShaderProgramFactory {
 	
+	@SuppressWarnings("unused")
 	private static final String TAG = ShaderProgramFactory.class.getName();
 	
 	public static void init() {
