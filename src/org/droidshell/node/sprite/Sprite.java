@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import org.droidshell.lang.math.Color;
 import org.droidshell.lang.math.Matrix;
 import org.droidshell.lang.math.Vector2D;
-import org.droidshell.node.Rectangle;
+import org.droidshell.node.rectangle.Rectangle;
 import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
 import org.droidshell.opengl.texture.Texture;
 import org.droidshell.opengl.texture.TextureDirectory;

@@ -3,6 +3,7 @@ package org.droidshell.node;
 import java.util.ArrayList;
 
 import org.droidshell.node.interfaces.iRenderable;
+import org.droidshell.node.interfaces.iTransformable;
 import org.droidshell.node.interfaces.iUpdatable;
 import org.droidshell.render.RenderContext;
 
@@ -14,7 +15,7 @@ import android.util.Log;
  * @author Zsolt Vad
  * @since 00:00:00 - 01.03.2012
  */
-public class NodeList<E extends iUpdatable & iRenderable> extends ArrayList<E> {
+public class NodeList<E extends iUpdatable & iRenderable & iTransformable> extends ArrayList<E> {
 	
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = NodeList.class.getName();
@@ -55,17 +56,12 @@ public class NodeList<E extends iUpdatable & iRenderable> extends ArrayList<E> {
 		return null;
 	}
 	
-	public void updateAll(long gameTime) {
+	public void update(long gameTime) {
 		for(int i=0; i < this.size(); i++)
 			this.get(i).update(gameTime);
 	}
 	
-	public void updateAllRecursively() {
-		for(int i=0; i < this.size(); i++)
-			this.get(i).update(true);
-	}
-	
-	public void renderAll(RenderContext renderContext) {
+	public void render(RenderContext renderContext) {
 		for(int i=0; i < this.size(); i++)
 			this.get(i).render(renderContext);
 	}

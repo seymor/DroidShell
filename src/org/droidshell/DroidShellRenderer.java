@@ -7,7 +7,7 @@ import org.droidshell.camera.Camera;
 import org.droidshell.lang.math.Matrix;
 import org.droidshell.lang.math.Vector3D;
 import org.droidshell.node.NodeList;
-import org.droidshell.node.sprite.Sprite;
+import org.droidshell.node.sprite.AnimatedSprite;
 import org.droidshell.opengl.GLStateManager;
 import org.droidshell.opengl.shader.ShaderDirectory;
 import org.droidshell.opengl.shader.ShaderFactory;
@@ -23,8 +23,8 @@ import android.opengl.GLSurfaceView.Renderer;
 
 public class DroidShellRenderer implements Renderer {
 
-	private NodeList<Sprite> sprites;
-	private Sprite sprite;
+	private NodeList<AnimatedSprite> sprites;
+	private AnimatedSprite sprite;
 	private Camera camera;
 	private float angle = 0;
 	private RenderContext renderContext;
@@ -37,9 +37,10 @@ public class DroidShellRenderer implements Renderer {
 		// Transformation like in OpenGL 1.0
 		sprite.translate(-2.5f + angle++/100, -1.0f);
 		//sprite.rotate(angle++);
-		//sprite.scale(0.8f, 0.8f);
+		//sprite.scale(1.5f, 1.5f);
 
-		sprites.renderAll(renderContext);
+		sprites.update(System.currentTimeMillis());
+		sprites.render(renderContext);
 	}
 
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -54,9 +55,9 @@ public class DroidShellRenderer implements Renderer {
 		camera = new Camera(new Vector3D(0, 0, -1), new Vector3D(0, 0, 0), -1, 1, 1,
 				100);
 
-		sprites = new NodeList<Sprite>();
+		sprites = new NodeList<AnimatedSprite>();
 
-		sprite = new Sprite(0.5f, 0.5f, R.drawable.icon);
+		sprite = new AnimatedSprite(27, 30, 1.0f, 1.2f, R.drawable.biz);
 
 		ShaderFactory.build(R.raw.test_vs, ShaderFactory.VERTEX_SHADER);
 		ShaderFactory.build(R.raw.test_fs, ShaderFactory.FRAGMENT_SHADER);

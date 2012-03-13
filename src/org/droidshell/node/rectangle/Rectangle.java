@@ -1,4 +1,4 @@
-package org.droidshell.node;
+package org.droidshell.node.rectangle;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -7,6 +7,7 @@ import java.nio.FloatBuffer;
 import org.droidshell.lang.math.Color;
 import org.droidshell.lang.math.Matrix;
 import org.droidshell.lang.math.Vector2D;
+import org.droidshell.node.Node;
 import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
 import org.droidshell.opengl.vertexbuffer.VertexBuffer;
 import org.droidshell.opengl.vertexbuffer.VertexBufferDirectory;
