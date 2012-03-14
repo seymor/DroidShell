@@ -1,14 +1,13 @@
-attribute vec2 vPosition;
-attribute vec4 vColor;
-attribute vec2 vTexture;
+attribute vec2 aPosition;
+attribute vec4 aColor;
+attribute vec2 aTexture;
 uniform mat4 uModelMatrix;
 uniform mat4 uModelViewProjMatrix;
-varying vec4 aColor;
-varying vec2 aTexture;
+varying vec4 vColor;
+varying vec2 vTexture;
 void main(){
-	aColor = vColor;
-	aTexture = vTexture;
+	vColor = aColor;
+	vTexture = aTexture;
 	mat4 m = uModelMatrix;
-	vec4 position = uModelViewProjMatrix * vec4(vPosition,1.0,1.0);
-	gl_Position = position;
+	gl_Position = uModelViewProjMatrix * vec4(aPosition,1.0,1.0);
 }

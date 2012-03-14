@@ -4,6 +4,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.droidshell.camera.Camera;
+import org.droidshell.lang.math.Color;
 import org.droidshell.lang.math.Matrix;
 import org.droidshell.lang.math.Vector3D;
 import org.droidshell.node.NodeList;
@@ -17,6 +18,7 @@ import org.droidshell.opengl.shader.program.ShaderProgramFactory;
 import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
 import org.droidshell.opengl.texture.TextureFactory;
 import org.droidshell.render.RenderContext;
+import org.droidshell.screen.ScreenManager;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
@@ -30,7 +32,7 @@ public class DroidShellRenderer implements Renderer {
 	private RenderContext renderContext;
 
 	public void onDrawFrame(GL10 glUnused) {
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+		ScreenManager.clear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 		sprite.modelMatrix = Matrix.identity();
 
@@ -44,11 +46,11 @@ public class DroidShellRenderer implements Renderer {
 	}
 
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
-		GLES20.glViewport(0, 0, width, height);
+		ScreenManager.viewPort(0, 0, width, height);
 	}
 
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-		GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+		ScreenManager.clearColor(Color.BLACK);
 
 		TextureFactory.buildTextures();
 
@@ -70,9 +72,9 @@ public class DroidShellRenderer implements Renderer {
 
 		renderContext = new RenderContext(camera, program);
 		ShaderProgramInput sI = renderContext.shaderInput;
-		sI.bindAttribute(sI.ATTRIBUTE_POS, "vPosition");
-		sI.bindAttribute(sI.ATTRIBUTE_COLOR, "vColor");
-		sI.bindAttribute(sI.ATTRIBUTE_TEXCOORD, "vTexture");
+		sI.bindAttribute(sI.ATTRIBUTE_POS, "aPosition");
+		sI.bindAttribute(sI.ATTRIBUTE_COLOR, "aColor");
+		sI.bindAttribute(sI.ATTRIBUTE_TEXCOORD, "aTexture");
 		
 		sI.bindUniform(sI.UNIFORM_MODELMATRIX, "uModelMatrix");
 		sI.bindUniform(sI.UNIFORM_MODELVIEWPROJMATRIX, "uModelViewProjMatrix");
