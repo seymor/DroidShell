@@ -2,6 +2,8 @@ package org.droidshell.opengl.shader;
 
 import java.util.HashMap;
 
+import org.droidshell.exception.UnkownShaderTypeException;
+
 import android.util.Log;
 
 /**
@@ -30,7 +32,7 @@ public class ShaderDirectory {
 		else if (glShaderType == ShaderFactory.FRAGMENT_SHADER)
 			fragmentShaders.put(resourceId, shaderId);
 		else
-			throw new Exception("Unkown shader type!");
+			throw new UnkownShaderTypeException("Unkown shader type!");
 	}
 
 	public static int getVertexShader(final int resourceId) {		

@@ -1,5 +1,6 @@
 package org.droidshell;
 
+import org.droidshell.music.MusicFactory;
 import org.droidshell.opengl.shader.ShaderFactory;
 import org.droidshell.opengl.shader.program.ShaderProgramFactory;
 import org.droidshell.opengl.texture.TextureFactory;
@@ -27,6 +28,8 @@ public class DroidShellActivity extends Activity {
         TextureFactory.init(this);
         
         VertexBufferFactory.init();
+        
+        MusicFactory.init(this);
         
         view = new DroidShellView(this);
         

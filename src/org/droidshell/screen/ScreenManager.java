@@ -2,7 +2,6 @@ package org.droidshell.screen;
 
 import org.droidshell.exception.ClassNotInitializedException;
 import org.droidshell.lang.math.Color;
-import org.droidshell.lang.math.Vector2D;
 
 import android.app.Activity;
 import android.opengl.GLES20;
@@ -44,16 +43,13 @@ public class ScreenManager {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
-	
+
 	public static void viewPort(int x, int y, int width, int height) {
 		GLES20.glViewport(x, y, width, height);
 	}
-
-	public static void clearColor(Color color) {
-		GLES20.glClearColor(color.r, color.g, color.b, color.a);
-	}
 	
-	public static void clear(int mask) {
+	public static void clearFrame(Color color, int mask) {
+		GLES20.glClearColor(color.r, color.g, color.b, color.a);
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 	}
 

@@ -6,15 +6,15 @@ package org.droidshell.lang;
  * @author Zsolt Vad
  * @since 00:00:00 - 01.03.2012
  */
-public class DSInt {
+public class DSInteger {
 	
 	public int value;
 	
-	public DSInt() {
+	public DSInteger() {
 		value = -1;
 	}
 	
-	public DSInt(int value) {
+	public DSInteger(int value) {
 		this.value = value;
 	}
 	

@@ -6,6 +6,12 @@ import org.droidshell.screen.ScreenManager;
 
 import android.util.Log;
 
+/**
+ * (c) 2012 Zsolt Vad
+ * 
+ * @author Zsolt Vad
+ * @since 00:00:00 - 01.03.2012
+ */
 public class Camera {
 
 	private static final String TAG = Camera.class.getName();

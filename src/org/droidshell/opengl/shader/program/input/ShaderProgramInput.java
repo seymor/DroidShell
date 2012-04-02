@@ -1,7 +1,7 @@
 package org.droidshell.opengl.shader.program.input;
 
 import org.droidshell.exception.ShaderProgramInputBindingException;
-import org.droidshell.lang.DSInt;
+import org.droidshell.lang.DSInteger;
 import org.droidshell.opengl.shader.program.ShaderProgram;
 import org.droidshell.opengl.vertexbuffer.VertexBuffer;
 
@@ -20,20 +20,20 @@ public class ShaderProgramInput {
 
 	public ShaderProgram shaderProgram;
 
-	public DSInt ATTRIBUTE_POS = new DSInt();
-	public DSInt ATTRIBUTE_COLOR = new DSInt();
-	public DSInt ATTRIBUTE_TEXCOORD = new DSInt();
+	public DSInteger ATTRIBUTE_POS = new DSInteger();
+	public DSInteger ATTRIBUTE_COLOR = new DSInteger();
+	public DSInteger ATTRIBUTE_TEXCOORD = new DSInteger();
 
-	public DSInt UNIFORM_MODELMATRIX = new DSInt();
-	public DSInt UNIFORM_MODELVIEWMATRIX = new DSInt();
-	public DSInt UNIFORM_MODELVIEWPROJMATRIX = new DSInt();
-	public DSInt UNIFORM_TEXTURE_SAMPLER = new DSInt();
+	public DSInteger UNIFORM_MODELMATRIX = new DSInteger();
+	public DSInteger UNIFORM_MODELVIEWMATRIX = new DSInteger();
+	public DSInteger UNIFORM_MODELVIEWPROJMATRIX = new DSInteger();
+	public DSInteger UNIFORM_TEXTURE_SAMPLER = new DSInteger();
 
 	public ShaderProgramInput(ShaderProgram shaderProgram) {
 		this.shaderProgram = shaderProgram;
 	}
 
-	public void bindAttribute(DSInt attributeInput, String name) {
+	public void bindAttribute(DSInteger attributeInput, String name) {
 		int handler = GLES20.glGetAttribLocation(shaderProgram.id, name);
 
 		if (handler >= 0)
@@ -44,7 +44,7 @@ public class ShaderProgramInput {
 		}
 	}
 
-	public void bindUniform(DSInt uniformInput, String name) {
+	public void bindUniform(DSInteger uniformInput, String name) {
 		int handler = GLES20.glGetUniformLocation(shaderProgram.id, name);
 
 		if (handler >= 0)
@@ -55,19 +55,19 @@ public class ShaderProgramInput {
 		}
 	}
 
-	public void prepareVertex(DSInt attributeInput, VertexBuffer vB) {
+	public void prepareVertex(DSInteger attributeInput, VertexBuffer vB) {
 		GLES20.glVertexAttribPointer(attributeInput.toInteger(), vB.size, vB.glType,
 				vB.isNormalized, 0, vB.buffer);
 		GLES20.glEnableVertexAttribArray(attributeInput.toInteger());
 	}
 
-	public void prepareTexture(DSInt uniformInput, int textureId) {
+	public void prepareTexture(DSInteger uniformInput, int textureId) {
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 		GLES20.glUniform1i(uniformInput.toInteger(), 0);
 	}
 
-	public void prepareMatrix(DSInt uniformInput, float[] matrix) {
+	public void prepareMatrix(DSInteger uniformInput, float[] matrix) {
 		GLES20.glUniformMatrix4fv(uniformInput.toInteger(), 1, false, matrix, 0);
 	}
 

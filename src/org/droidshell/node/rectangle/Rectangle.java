@@ -136,28 +136,6 @@ public class Rectangle extends Node {
 		colorBuffer = VertexBufferDirectory.get(vbId);
 	}
 
-	@Override
-	public void translate(float tX, float tY) {
-		this.modelMatrix.translate(tX, tY);
-	}
-
-	@Override
-	public void scale(float sX, float sY) {
-		this.modelMatrix.scale(sX, sY);
-	}
-
-	@Override
-	public void rotate(float angle) {
-		this.modelMatrix.rotate(angle);
-	}
-
-	@Override
-	public void update(long gameTime) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void render(RenderContext renderContext) {
 		ShaderProgramInput sI = renderContext.shaderInput;
 
