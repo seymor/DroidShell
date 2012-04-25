@@ -1,6 +1,6 @@
 package org.droidshell.node.interfaces;
 
-import org.droidshell.render.RenderContext;
+import org.droidshell.engine.render.RenderContext;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -10,6 +10,6 @@ import org.droidshell.render.RenderContext;
  */
 public interface iRenderable {
 	
-	public void render(final RenderContext renderContext);
+	public void onRender(final RenderContext renderContext);
 
 }

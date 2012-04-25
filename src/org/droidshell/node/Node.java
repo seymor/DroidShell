@@ -2,7 +2,6 @@ package org.droidshell.node;
 
 import java.util.ArrayList;
 
-import org.droidshell.lang.math.Color;
 import org.droidshell.lang.math.Matrix;
 import org.droidshell.lang.math.Vector2D;
 import org.droidshell.node.interfaces.iRenderable;
@@ -10,79 +9,95 @@ import org.droidshell.node.interfaces.iTransformable;
 import org.droidshell.node.interfaces.iUpdatable;
 import org.droidshell.node.modifier.iNodeModifier;
 
+import android.util.Log;
+
 /**
  * (c) 2012 Zsolt Vad
  * 
  * @author Zsolt Vad
  * @since 00:00:00 - 01.03.2012
  */
-public abstract class Node implements iUpdatable, iRenderable, iTransformable {
+public abstract class Node implements iUpdatable, iRenderable, iTransformable,
+		Cloneable {
+
+	private static final String TAG = Node.class.getName();
+
+	private Vector2D worldPosition;
 
 	public Vector2D coords;
-	public Color color;
-
-	public Matrix modelMatrix = Matrix.identity();
-
-	public boolean isVisible = true;
-	public boolean isUpdatable = true;
-
-	public int zIndex = 0;
-
+	public Matrix modelMatrix = Matrix.identityMatrix();
+	public boolean isVisible;
+	public boolean isUpdatable;
+	public int zIndex;
 	public Node parentNode;
 	public NodeList<Node> childrenList;
 
 	public ArrayList<iNodeModifier> modifierList;
 
 	public Node() {
-		coords = new Vector2D(0, 0);
-		color = Color.WHITE;
+		worldPosition = new Vector2D();
+		coords = new Vector2D();
+		childrenList = new NodeList<Node>();
+		modifierList = new ArrayList<iNodeModifier>();
+
+		isVisible = true;
+		isUpdatable = true;
+		zIndex = 0;
 	}
 
 	public Node(Vector2D coords) {
+		worldPosition = new Vector2D();
 		this.coords = coords;
-		this.color = Color.WHITE;
+		childrenList = new NodeList<Node>();
+		modifierList = new ArrayList<iNodeModifier>();
+
+		isVisible = true;
+		isUpdatable = true;
+		zIndex = 0;
 	}
 
-	public Node(Color color) {
-		this.coords = new Vector2D(0, 0);
-		this.color = color;
-	}
-
-	public Node(Vector2D coords, Color color) {
-		this.coords = coords;
-		this.color = color;
+	public void resetPosition() {
+		modelMatrix.loadIdentity();
 	}
 
 	public Vector2D getPosition() {
-		return modelMatrix.multiply(coords);
+		return Matrix.multiply(worldPosition, modelMatrix, coords);
 	}
 
-	public void translate(float tX, float tY) {
-		this.modelMatrix.translate(tX, tY);
+	public void onTranslate(float tX, float tY) {
+		modelMatrix.translate(tX, tY);
 	}
 
-	public void scale(float sX, float sY) {
-		this.modelMatrix.scale(sX, sY);
+	public void onScale(float sX, float sY) {
+		modelMatrix.scale(sX, sY);
 	}
 
-	public void rotate(float angle) {
-		this.modelMatrix.rotate(angle);
+	public void onRotate(float angle) {
+		modelMatrix.rotate(angle);
 	}
 
-	public void initModifiers() {
+	public void onUpdate(long gameTime) {
 		for (int i = 0; i < modifierList.size(); i++)
-			modifierList.get(i).setModifier(this);
+			modifierList.get(i).onUpdate(this, gameTime);
 	}
 
-	public void update(long gameTime) {
-		// TODO
-	}
-
-	public void update(long gameTime, boolean childrenUpdate) {
+	public void onUpdate(long gameTime, boolean childrenUpdate) {
+		for (int i = 0; i < modifierList.size(); i++)
+			modifierList.get(i).onUpdate(this, gameTime);
 
 		if (childrenUpdate)
 			for (int i = 0; i < childrenList.size(); i++)
-				childrenList.get(i).update(gameTime);
+				childrenList.get(i).onUpdate(gameTime);
+	}
+
+	@Override
+	public Node clone() {
+		try {
+			return (Node) super.clone();
+		} catch (CloneNotSupportedException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		return null;
 	}
 
 }

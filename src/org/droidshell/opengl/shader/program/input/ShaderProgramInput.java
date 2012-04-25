@@ -26,6 +26,7 @@ public class ShaderProgramInput {
 
 	public DSInteger UNIFORM_MODELMATRIX = new DSInteger();
 	public DSInteger UNIFORM_MODELVIEWMATRIX = new DSInteger();
+	public DSInteger UNIFORM_VIEWPROJMATRIX = new DSInteger();
 	public DSInteger UNIFORM_MODELVIEWPROJMATRIX = new DSInteger();
 	public DSInteger UNIFORM_TEXTURE_SAMPLER = new DSInteger();
 
@@ -56,8 +57,8 @@ public class ShaderProgramInput {
 	}
 
 	public void prepareVertex(DSInteger attributeInput, VertexBuffer vB) {
-		GLES20.glVertexAttribPointer(attributeInput.toInteger(), vB.size, vB.glType,
-				vB.isNormalized, 0, vB.buffer);
+		GLES20.glVertexAttribPointer(attributeInput.toInteger(), vB.size,
+				vB.glType, vB.isNormalized, 0, vB.buffer);
 		GLES20.glEnableVertexAttribArray(attributeInput.toInteger());
 	}
 

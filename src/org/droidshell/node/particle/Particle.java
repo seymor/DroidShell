@@ -1,6 +1,6 @@
 package org.droidshell.node.particle;
 
-import org.droidshell.lang.math.MathHelper;
+import org.droidshell.lang.math.Math;
 import org.droidshell.lang.math.Vector2D;
 import org.droidshell.node.Node;
 
@@ -31,10 +31,10 @@ public class Particle<T extends Node> {
 
 	public void update(long gameTime) {
 		if (!isDead) {
-			position.add(velocity.scale(gameTime));
+			position.add(velocity.multiply(gameTime));
 			actualAge += gameTime;
-			node.translate(position.x, position.y);
-			node.update(gameTime);
+			node.onTranslate(position.x, position.y);
+			node.onUpdate(gameTime);
 		}
 
 		if (actualAge >= maxAge && !isDead)
@@ -43,8 +43,8 @@ public class Particle<T extends Node> {
 
 	public void reborn() {
 		position.setAll(0);
-		velocity.set(MathHelper.generateRandomFloat(0, 0.01f),
-				MathHelper.generateRandomFloat(0, 0.01f));
+		velocity.set(Math.generateRandomFloat(0, 0.01f),
+				Math.generateRandomFloat(0, 0.01f));
 	}
 
 }

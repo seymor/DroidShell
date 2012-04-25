@@ -11,7 +11,7 @@ public class DSLong {
 	public long value;
 	
 	public DSLong() {
-		value = -1l;
+		value = -1L;
 	}
 	
 	public DSLong(long value) {
@@ -19,7 +19,7 @@ public class DSLong {
 	}
 	
 	public Long toLong() {
-		return new Long(value);
+		return Long.valueOf(value);
 	}
 
 }

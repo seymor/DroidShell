@@ -27,19 +27,19 @@ public class ShaderProgram {
 	
 	public ShaderProgram create() {
 		
-		this.id = GLES20.glCreateProgram();
-		GLES20.glAttachShader(this.id, this.vertexShaderId);
-		GLES20.glAttachShader(this.id, this.fragmentShaderId);
+		id = GLES20.glCreateProgram();
+		GLES20.glAttachShader(id, vertexShaderId);
+		GLES20.glAttachShader(id, fragmentShaderId);
 		
-		GLES20.glLinkProgram(this.id);
+		GLES20.glLinkProgram(id);
 		
 		int[] linkStatus = new int[1];
-		GLES20.glGetProgramiv(this.id, GLES20.GL_LINK_STATUS, linkStatus, 0);
+		GLES20.glGetProgramiv(id, GLES20.GL_LINK_STATUS, linkStatus, 0);
 		
 		if(linkStatus[0] == GLES20.GL_FALSE)
 		{
 			Log.e(TAG, "Program link failed!");
-			GLES20.glDeleteProgram(this.id);
+			GLES20.glDeleteProgram(id);
 			return null;
 		}
 		
@@ -47,7 +47,7 @@ public class ShaderProgram {
 	}
 	
 	public void use() {
-		GLES20.glUseProgram(this.id);
+		GLES20.glUseProgram(id);
 	}
 
 }

@@ -70,9 +70,9 @@ public class ShaderFactory {
 		
 	}
 	
-	public static void init(Context c) {
+	public static void onInit(Context c) {
 		context = c;
-		ShaderDirectory.init();
+		ShaderDirectory.onInit();
 	}
 	
 	public static void build(final int resourceId, final int glShaderType) {

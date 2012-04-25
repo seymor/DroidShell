@@ -19,7 +19,7 @@ public class DSString {
 	}
 	
 	public String toString() {
-		return new String(value);
+		return value;
 	}
 
 }

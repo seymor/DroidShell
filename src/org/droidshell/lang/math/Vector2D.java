@@ -37,7 +37,7 @@ public class Vector2D implements Cloneable {
 		x = v.x;
 		y = v.y;
 	}
-	
+
 	public Vector2D(Vector3D v) {
 		x = v.x;
 		y = v.y;
@@ -68,6 +68,12 @@ public class Vector2D implements Cloneable {
 		y += v.y;
 		return this;
 	}
+	
+	public Vector2D add(Vector3D v) {
+		x += v.x;
+		y += v.y;
+		return this;
+	}
 
 	public Vector2D addN(Vector2D v) {
 		return new Vector2D(x + v.x, y + v.y);
@@ -83,13 +89,13 @@ public class Vector2D implements Cloneable {
 		return new Vector2D(x - v.x, y - v.y);
 	}
 
-	public Vector2D scale(float s) {
+	public Vector2D multiply(float s) {
 		x *= s;
 		y *= s;
 		return this;
 	}
 
-	public Vector2D scaleN(float s) {
+	public Vector2D multiplyN(float s) {
 		return new Vector2D(x * s, y * s);
 	}
 
@@ -134,15 +140,59 @@ public class Vector2D implements Cloneable {
 	}
 
 	public float length() {
-		return MathHelper.sqrt(x * x + y * y);
+		return Math.sqrt(x * x + y * y);
 	}
 
 	public float angle() {
-		return MathHelper.atan2(y, x);
+		return Math.atan2(y, x);
 	}
 
 	public float angle(Vector2D unit) {
-		return MathHelper.acos(this.dotProduct(unit));
+		return Math.acos(this.dotProduct(unit));
+	}
+
+	public static Vector2D add(Vector2D resultVector, Vector2D v1, Vector2D v2) {
+		resultVector.x = v1.x + v2.x;
+		resultVector.y = v1.y + v2.y;
+
+		return resultVector;
+	}
+
+	public static Vector2D subtract(Vector2D resultVector, Vector2D v1,
+			Vector2D v2) {
+		resultVector.x = v1.x - v2.x;
+		resultVector.y = v1.y - v2.y;
+
+		return resultVector;
+	}
+
+	public static Vector2D multiply(Vector2D resultVector, Vector2D v, float s) {
+		resultVector.x = v.x * s;
+		resultVector.y = v.y * s;
+
+		return resultVector;
+	}
+
+	public static Vector2D divide(Vector2D resultVector, Vector2D v, float s) {
+		resultVector.x = v.x / s;
+		resultVector.y = v.y / s;
+
+		return resultVector;
+	}
+
+	public static Vector2D neg(Vector2D resultVector, Vector2D v) {
+		resultVector.x = -v.x;
+		resultVector.y = -v.y;
+
+		return resultVector;
+	}
+
+	public static Vector2D normalize(Vector2D resultVector, Vector2D v) {
+		float l = v.length();
+		if (l != 0)
+			return Vector2D.divide(resultVector, v, l);
+
+		return Vector2D.divide(resultVector, v, 1);
 	}
 
 	public int hashCode() {
@@ -170,11 +220,10 @@ public class Vector2D implements Cloneable {
 		try {
 			Vector2D v = (Vector2D) o;
 
-			if (Float.compare(v.x, x) == 0
-					&& Float.compare(v.y, y) == 0)
-				return true;
-			else
-				return false;
+			boolean comp = Float.compare(v.x, x) == 0
+					&& Float.compare(v.y, y) == 0;
+
+			return comp;
 
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage());

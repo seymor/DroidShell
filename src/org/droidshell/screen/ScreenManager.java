@@ -1,9 +1,9 @@
 package org.droidshell.screen;
 
-import org.droidshell.exception.ClassNotInitializedException;
 import org.droidshell.lang.math.Color;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLES20;
 import android.util.DisplayMetrics;
 import android.view.Window;
@@ -17,12 +17,16 @@ import android.view.WindowManager;
  */
 public class ScreenManager {
 
+	public static final int LANDSCAPE = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+	public static final int PORTRAIT = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 	private static Activity activity;
 
-	public static int width = 480;
-	public static int height = 800;
+	public static int orientation;
+	public static int width;
+	public static int height;
 
-	public static void init(Activity a) {
+	public static void onInit(Activity a) {
 		activity = a;
 		DisplayMetrics dM = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(dM);
@@ -31,9 +35,6 @@ public class ScreenManager {
 	}
 
 	public static void fullScreen() {
-
-		if (activity == null)
-			throw new ClassNotInitializedException("Activity not set!");
 		/*
 		 * You can set this in AndroidManifest:
 		 * android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
@@ -44,13 +45,30 @@ public class ScreenManager {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
 
+	public static void ignoreOrientationChanges() {
+		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+	}
+
+	public static void setOrientation(int screenConstant) {
+
+		/*
+		 * You can set this in AndroidManifest:
+		 * android:screenOrientation="landscape"
+		 */
+		orientation = screenConstant;
+		activity.setRequestedOrientation(screenConstant);
+	}
+
 	public static void viewPort(int x, int y, int width, int height) {
 		GLES20.glViewport(x, y, width, height);
 	}
-	
-	public static void clearFrame(Color color, int mask) {
+
+	public static void clearColor(Color color) {
 		GLES20.glClearColor(color.r, color.g, color.b, color.a);
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+	}
+
+	public static void clearFrame(int mask) {
+		GLES20.glClear(mask);
 	}
 
 }

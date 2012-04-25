@@ -9,8 +9,11 @@ import android.media.MediaPlayer;
  * @since 00:00:00 - 01.04.2012
  */
 public class Music {
+	
+	@SuppressWarnings("unused")
+	private static final String TAG = Music.class.getName();
 
-	public MediaPlayer mediaPlayer;
+	private MediaPlayer mediaPlayer;
 
 	public Music(MediaPlayer mediaPlayer) {
 		this.mediaPlayer = mediaPlayer;
@@ -39,6 +42,10 @@ public class Music {
 
 	public void seekTo(int milliSeconds) {
 		mediaPlayer.seekTo(milliSeconds);
+	}
+	
+	public void reset() {
+		mediaPlayer.reset();
 	}
 
 	public boolean isPlaying() {

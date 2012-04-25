@@ -19,7 +19,7 @@ public class DSDouble {
 	}
 	
 	public Double toDouble() {
-		return new Double(value);
+		return Double.valueOf(value);
 	}
 	
 }

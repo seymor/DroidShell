@@ -1,8 +1,8 @@
 package org.droidshell.music;
 
-import java.util.HashMap;
+import org.droidshell.exception.ResourceNotFoundException;
 
-import android.util.Log;
+import android.util.SparseArray;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -12,12 +12,13 @@ import android.util.Log;
  */
 public class MusicLibrary {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = MusicLibrary.class.getName();
 
-	private static HashMap<Integer, Music> musicList;
+	private static SparseArray<Music> musicList;
 
-	public static void init() {
-		musicList = new HashMap<Integer, Music>();
+	public static void onInit() {
+		musicList = new SparseArray<Music>();
 	}
 
 	public static void put(int resourceId, Music music) {
@@ -25,11 +26,14 @@ public class MusicLibrary {
 	}
 
 	public static Music get(int resourceId) {
-		if (musicList.containsKey(resourceId))
-			return musicList.get(resourceId);
-
-		Log.e(TAG, "Failed to get music: " + resourceId);
-		return null;
+		Music music = musicList.get(resourceId);
+		if(music == null)
+			throw new ResourceNotFoundException("Music is not found in directory!");
+		return music;
+	}
+	
+	public static void remove(int resourceId) {
+		musicList.remove(resourceId);
 	}
 
 }

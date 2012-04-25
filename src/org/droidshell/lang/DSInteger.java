@@ -19,7 +19,7 @@ public class DSInteger {
 	}
 	
 	public Integer toInteger() {
-		return new Integer(value);
+		return Integer.valueOf(value);
 	}
 
 }

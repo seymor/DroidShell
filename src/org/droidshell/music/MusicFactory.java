@@ -15,11 +15,12 @@ public class MusicFactory {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = MusicFactory.class.getName();
+	
 	private static Context context;
 
-	public static void init(Context c) {
+	public static void onInit(Context c) {
 		context = c;
-		MusicLibrary.init();
+		MusicLibrary.onInit();
 	}
 
 	public static void build(final int resourceId) {

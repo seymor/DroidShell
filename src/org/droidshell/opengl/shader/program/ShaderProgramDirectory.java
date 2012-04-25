@@ -1,8 +1,8 @@
 package org.droidshell.opengl.shader.program;
 
-import java.util.HashMap;
+import org.droidshell.exception.ResourceNotFoundException;
 
-import android.util.Log;
+import android.util.SparseArray;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -12,24 +12,28 @@ import android.util.Log;
  */
 public class ShaderProgramDirectory {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = ShaderProgramDirectory.class.getName();
 
-	private static HashMap<String, ShaderProgram> shaderPrograms;
+	private static SparseArray<ShaderProgram> shaderPrograms;
 
-	public static void init() {
-		shaderPrograms = new HashMap<String, ShaderProgram>();
+	public static void onInit() {
+		shaderPrograms = new SparseArray<ShaderProgram>();
 	}
 
 	public static void put(String programName, ShaderProgram program) {
-		shaderPrograms.put(programName, program);
+		shaderPrograms.put(programName.hashCode(), program);
 	}
 
 	public static ShaderProgram get(String programName) {
-		if (shaderPrograms.containsKey(programName))
-			return shaderPrograms.get(programName);
-
-		Log.e(TAG, "Failed to get shader program: " + programName);
-		return null;
+		ShaderProgram shaderProgram = shaderPrograms.get(programName.hashCode());
+		if(shaderProgram == null)
+			throw new ResourceNotFoundException("ShaderProgram is not found in directory!");
+		return shaderProgram;
+	}
+	
+	public static void remove(String vbId) {
+		shaderPrograms.remove(vbId.hashCode());
 	}
 
 }

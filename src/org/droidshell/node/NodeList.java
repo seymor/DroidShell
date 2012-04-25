@@ -2,12 +2,7 @@ package org.droidshell.node;
 
 import java.util.ArrayList;
 
-import org.droidshell.node.interfaces.iRenderable;
-import org.droidshell.node.interfaces.iTransformable;
-import org.droidshell.node.interfaces.iUpdatable;
-import org.droidshell.render.RenderContext;
-
-import android.util.Log;
+import org.droidshell.engine.render.RenderContext;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -15,71 +10,62 @@ import android.util.Log;
  * @author Zsolt Vad
  * @since 00:00:00 - 01.03.2012
  */
-public class NodeList<E extends iUpdatable & iRenderable & iTransformable>
-		extends ArrayList<E> {
+public class NodeList<T extends Node> extends ArrayList<T> {
 
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private static final String TAG = NodeList.class.getName();
 
 	public NodeList() {
+		super();
 	}
 
 	public NodeList(int size) {
 		super(size);
 	}
 
-	public void add(int index, E object) {
-		E old = null;
-
-		if (index < this.size() && index >= 0) {
-			old = this.get(index);
-			this.set(index, object);
-			this.add(old);
-		} else {
-			this.add(object);
+	private int calculateIndex(T object) {
+		for (int i = 0; i < size(); i++) {
+			if (object.zIndex < get(i).zIndex)
+				return i;
 		}
+		return size();
 	}
 
-	public NodeList<E> push(E object) {
-		this.add(object);
+	@Override
+	public boolean add(T object) {
+		add(calculateIndex(object), object);
+		return true;
+	};
+
+	public NodeList<T> push(T object) {
+		add(object);
 		return this;
 	}
 
-	public E remove(int index) {
-		E removable = null;
-		if (index < this.size() && index >= 0) {
-			removable = this.get(index);
-			this.set(index, this.get(this.size() - 1));
-			return removable;
-		}
-
-		Log.e(TAG, "Node not found on index: " + index);
-		return null;
-	}
-
-	public NodeList<Node> sort() {
-		NodeList<Node> list = new NodeList<Node>();
-
-		// TODO: algorithm
-
-		return list;
-	}
-
-	public void update(long gameTime) {
+	public void onUpdate(long gameTime) {
 		for (int i = 0; i < size(); i++) {
-			this.get(i).update(gameTime);
+			Node node = this.get(i);
+			if (node.isUpdatable)
+				node.onUpdate(gameTime);
 		}
 	}
 
-	public void update(long gameTime, boolean childrenUpdate) {
+	public void onUpdate(long gameTime, boolean childrenUpdate) {
 		for (int i = 0; i < size(); i++) {
-			this.get(i).update(gameTime, childrenUpdate);
+			Node node = this.get(i);
+			if (node.isUpdatable)
+				node.onUpdate(gameTime, childrenUpdate);
 		}
 	}
 
-	public void render(RenderContext renderContext) {
-		for (int i = 0; i < this.size(); i++)
-			this.get(i).render(renderContext);
+	public void onRender(RenderContext renderContext) {
+		for (int i = 0; i < this.size(); i++) {
+			Node node = this.get(i);
+			if (node.isVisible)
+				node.onRender(renderContext);
+		}
+
 	}
 
 }

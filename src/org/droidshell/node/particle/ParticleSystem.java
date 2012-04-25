@@ -2,10 +2,10 @@ package org.droidshell.node.particle;
 
 import java.util.ArrayList;
 
+import org.droidshell.engine.render.RenderContext;
 import org.droidshell.node.Node;
 import org.droidshell.node.particle.emitter.iParticleEmitter;
 import org.droidshell.node.particle.modifier.iParticleModifier;
-import org.droidshell.render.RenderContext;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -26,8 +26,7 @@ public class ParticleSystem<T extends Node> extends Node {
 		this.particleEmitter = particleEmitter;
 		
 		for(int i = 0; i < particleCount; i++) {
-			//TODO
-			// particles[i] = new Particle(node.deepCopy, 1000);
+			particles[i] = new Particle<T>((T)node.clone(), 1000);
 		}
 		
 		particleModifierList = new ArrayList<iParticleModifier<T>>();
@@ -47,14 +46,14 @@ public class ParticleSystem<T extends Node> extends Node {
 		}
 	}
 	
-	public void update(long gameTime) {
+	public void onUpdate(long gameTime) {
 		for(int i = 0; i < particles.length; i++)
 			particles[i].update(gameTime);
 	}
 	
-	public void render(RenderContext renderContext) {
+	public void onRender(RenderContext renderContext) {
 		for(int i = 0; i < particles.length; i++)
-			particles[i].node.render(renderContext);
+			particles[i].node.onRender(renderContext);
 		
 	}
 

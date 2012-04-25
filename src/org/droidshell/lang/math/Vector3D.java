@@ -8,7 +8,7 @@ import android.util.Log;
  * @author Zsolt Vad
  * @since 00:00:00 - 01.03.2012
  */
-public class Vector3D {
+public class Vector3D implements Cloneable {
 
 	private static final String TAG = Vector3D.class.getName();
 
@@ -76,6 +76,16 @@ public class Vector3D {
 		return this;
 	}
 
+	public Vector3D add(Vector2D v) {
+		x += v.x;
+		y += v.y;
+		return this;
+	}
+
+	public Vector3D addN(Vector2D v) {
+		return new Vector3D(x + v.x, y + v.y, z);
+	}
+
 	public Vector3D add(Vector3D v) {
 		x += v.x;
 		y += v.y;
@@ -98,14 +108,24 @@ public class Vector3D {
 		return new Vector3D(x - v.x, y - v.y, z - v.z);
 	}
 
-	public Vector3D scale(float s) {
+	public Vector3D subtract(Vector2D v) {
+		x -= v.x;
+		y -= v.y;
+		return this;
+	}
+
+	public Vector3D subtractN(Vector2D v) {
+		return new Vector3D(x - v.x, y - v.y, z);
+	}
+
+	public Vector3D multiply(float s) {
 		x *= s;
 		y *= s;
 		z *= s;
 		return this;
 	}
 
-	public Vector3D scaleN(float s) {
+	public Vector3D multiplyN(float s) {
 		return new Vector3D(x * s, y * s, z * s);
 	}
 
@@ -157,11 +177,69 @@ public class Vector3D {
 	}
 
 	public float length() {
-		return MathHelper.sqrt(x * x + y * y + z * z);
+		return Math.sqrt(x * x + y * y + z * z);
 	}
 
 	public float angle(Vector3D unit) {
-		return MathHelper.acos(this.dotProduct(unit));
+		return Math.acos(this.dotProduct(unit));
+	}
+
+	public static Vector3D add(Vector3D resultVector, Vector3D v1, Vector3D v2) {
+		resultVector.x = v1.x + v2.x;
+		resultVector.y = v1.y + v2.y;
+		resultVector.z = v1.z + v2.z;
+
+		return resultVector;
+	}
+
+	public static Vector3D subtract(Vector3D resultVector, Vector3D v1,
+			Vector3D v2) {
+		resultVector.x = v1.x - v2.x;
+		resultVector.y = v1.y - v2.y;
+		resultVector.z = v1.z - v2.z;
+
+		return resultVector;
+	}
+
+	public static Vector3D multiply(Vector3D resultVector, Vector3D v, float s) {
+		resultVector.x = v.x * s;
+		resultVector.y = v.y * s;
+		resultVector.z = v.z * s;
+
+		return resultVector;
+	}
+
+	public static Vector3D divide(Vector3D resultVector, Vector3D v, float s) {
+		resultVector.x = v.x / s;
+		resultVector.y = v.y / s;
+		resultVector.z = v.z / s;
+
+		return resultVector;
+	}
+
+	public static Vector3D neg(Vector3D resultVector, Vector3D v) {
+		resultVector.x = -v.x;
+		resultVector.y = -v.y;
+		resultVector.z = -v.z;
+
+		return resultVector;
+	}
+
+	public static Vector3D normalize(Vector3D resultVector, Vector3D v) {
+		float l = v.length();
+		if (l != 0)
+			return Vector3D.divide(resultVector, v, l);
+
+		return Vector3D.divide(resultVector, v, 1);
+	}
+
+	public static Vector3D crossProduct(Vector3D resultVector, Vector3D v1,
+			Vector3D v2) {
+		resultVector.x = v1.y * v2.z - v1.z * v2.y;
+		resultVector.y = v1.z * v2.x - v1.x * v2.z;
+		resultVector.z = v1.x * v2.y - v1.y * v2.x;
+
+		return resultVector;
 	}
 
 	public int hashCode() {
@@ -190,11 +268,10 @@ public class Vector3D {
 		try {
 			Vector3D v = (Vector3D) o;
 
-			if (Float.compare(v.x, x) == 0 && Float.compare(v.y, y) == 0
-					&& Float.compare(v.z, z) == 0)
-				return true;
-			else
-				return false;
+			boolean comp = Float.compare(v.x, x) == 0
+					&& Float.compare(v.y, y) == 0 && Float.compare(v.z, z) == 0;
+
+			return comp;
 
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage());

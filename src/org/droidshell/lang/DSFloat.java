@@ -19,7 +19,7 @@ public class DSFloat {
 	}
 	
 	public Float toFloat() {
-		return new Float(value);
+		return Float.valueOf(value);
 	}
 
 }

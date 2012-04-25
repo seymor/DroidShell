@@ -8,8 +8,8 @@ package org.droidshell.node.interfaces;
  */
 public interface iTransformable {
 	
-	public void translate(float tX, float tY);
-	public void scale(float sX, float sY);
-	public void rotate(float angleD);
+	public void onTranslate(float tX, float tY);
+	public void onScale(float sX, float sY);
+	public void onRotate(float angleD);
 
 }

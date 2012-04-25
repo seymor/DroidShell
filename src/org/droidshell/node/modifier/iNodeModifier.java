@@ -9,7 +9,7 @@ import org.droidshell.node.Node;
  * @since 00:00:00 - 01.03.2012
  */
 public interface iNodeModifier {
-	
-	public void setModifier(Node node);
+
+	public void onUpdate(Node node, long gameTime);
 
 }

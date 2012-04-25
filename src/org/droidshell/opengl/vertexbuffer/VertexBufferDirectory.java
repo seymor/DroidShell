@@ -1,8 +1,8 @@
 package org.droidshell.opengl.vertexbuffer;
 
-import java.util.HashMap;
+import org.droidshell.exception.ResourceNotFoundException;
 
-import android.util.Log;
+import android.util.SparseArray;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -12,24 +12,28 @@ import android.util.Log;
  */
 public class VertexBufferDirectory {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = VertexBufferDirectory.class.getName();
-	
-	private static HashMap<String, VertexBuffer> buffers;
-	
-	public static void init() {
-		buffers = new HashMap<String, VertexBuffer>();
+
+	private static SparseArray<VertexBuffer> buffers;
+
+	public static void onInit() {
+		buffers = new SparseArray<VertexBuffer>();
 	}
-	
+
 	public static void put(String vbId, VertexBuffer buffer) {
-		buffers.put(vbId, buffer);
+		buffers.put(vbId.hashCode(), buffer);
 	}
-	
+
 	public static VertexBuffer get(String name) {
-		if(buffers.containsKey(name))
-			return buffers.get(name);
-		
-		Log.e(TAG, "Failed to get vertex buffer: " + name);
-		return null;
+		VertexBuffer buffer = buffers.get(name.hashCode());
+		if(buffer == null)
+			throw new ResourceNotFoundException("VertexBuffer is not found in directory!");
+		return buffer;
 	}
 	
+	public static void remove(String vbId) {
+		buffers.remove(vbId.hashCode());
+	}
+
 }

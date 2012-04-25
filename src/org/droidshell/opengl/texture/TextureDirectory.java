@@ -1,8 +1,8 @@
 package org.droidshell.opengl.texture;
 
-import java.util.HashMap;
+import org.droidshell.exception.ResourceNotFoundException;
 
-import android.util.Log;
+import android.util.SparseArray;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -12,24 +12,28 @@ import android.util.Log;
  */
 public class TextureDirectory {
 	
+	@SuppressWarnings("unused")
 	private static final String TAG = TextureDirectory.class.getName();
 
-	private static HashMap<Integer, Texture> textures;
+	private static SparseArray<Texture> textures;
 	
-	public static void init() {
-		textures = new HashMap<Integer, Texture>();
+	public static void onInit() {
+		textures = new SparseArray<Texture>();
 	}
 	
 	public static void put(int resourceId, Texture texture) {		
 		textures.put(resourceId, texture);
 	}
 	
-	public static Texture get(Integer id) {		
-		if (textures.containsKey(id))
-			return textures.get(id);
-
-		Log.e(TAG, "Failed to get texture " + id);
-		return null;
+	public static Texture get(int id) {
+		Texture texture = textures.get(id);
+		if(texture == null)
+			throw new ResourceNotFoundException("Texture is not found in directory!");
+		return textures.get(id);
+	}
+	
+	public static void remove(int id) {
+		textures.remove(id);
 	}
 
 }

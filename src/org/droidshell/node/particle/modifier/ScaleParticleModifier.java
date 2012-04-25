@@ -13,7 +13,7 @@ public class ScaleParticleModifier<T extends Node> implements iParticleModifier<
 	}
 	
 	public void setModifier(Particle<T> particle) {
-		particle.node.scale(value.x, value.y);		
+		particle.node.onScale(value.x, value.y);		
 	}
 
 }

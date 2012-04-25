@@ -6,7 +6,7 @@ package org.droidshell.exception;
  * @author Zsolt Vad
  * @since 00:00:00 - 01.03.2012
  */
-public abstract class DroidShellException extends RuntimeException{
+public abstract class DroidShellException extends RuntimeException {
 
 	private static final long serialVersionUID = -5871826522303389291L;
 	

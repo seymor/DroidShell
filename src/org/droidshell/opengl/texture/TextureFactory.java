@@ -1,15 +1,11 @@
 package org.droidshell.opengl.texture;
 
-import java.lang.reflect.Field;
-
-import org.droidshell.R;
 import org.droidshell.exception.ClassNotInitializedException;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.Log;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -19,53 +15,47 @@ import android.util.Log;
  */
 public class TextureFactory {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = TextureFactory.class.getName();
-	
+
+	public static final int NEAREST = GLES20.GL_NEAREST;
+	public static final int LINEAR = GLES20.GL_LINEAR;
+	public static final int CLAMP_TO_EDGE = GLES20.GL_CLAMP_TO_EDGE;
+	public static final int REPEAT = GLES20.GL_REPEAT;
+
 	private static Context context;
 
-	public static void init(Context c) {
+	public static void onInit(Context c) {
 		context = c;
-		TextureDirectory.init();
+		TextureDirectory.onInit();
 	}
 
-	public static void buildTextures() {
-		
-		if(context == null)
+	public static void build(final int resourceId, final int minFilter,
+			final int magFilter, final int wrapS, final int wrapT) {
+		if (context == null)
 			throw new ClassNotInitializedException("Context not set!");
 
-		R.drawable drawableResources = new R.drawable();
-		Class<R.drawable> c = R.drawable.class;
-		Field[] fields = c.getDeclaredFields();
+		int[] textureArrayId = new int[1];
 
-		int[] textureArrayID = new int[1];
-		int resourceId;
+		GLES20.glGenTextures(1, textureArrayId, 0);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureArrayId[0]);
 
-		for (int i = 0; i < fields.length; i++) {
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+				GLES20.GL_TEXTURE_MIN_FILTER, minFilter);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+				GLES20.GL_TEXTURE_MAG_FILTER, magFilter);
 
-			try {
-				resourceId = fields[i].getInt(drawableResources);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
+				wrapS);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
+				wrapT);
 
-				GLES20.glGenTextures(1, textureArrayID, 0);
+		Texture texture = new Texture(BitmapFactory.decodeResource(
+				context.getResources(), resourceId), textureArrayId[0]);
 
-				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureArrayID[0]);
+		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, texture.bitmap, 0);
 
-				GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-						GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-				GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-						GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-				Texture texture = new Texture(BitmapFactory.decodeResource(
-						context.getResources(), resourceId), textureArrayID[0]);
-
-				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, texture.bitmap, 0);
-
-				TextureDirectory.put(resourceId, texture);
-
-			} catch (Exception e) {
-				Log.e(TAG, e.getMessage());
-				continue;
-			}
-		}
+		TextureDirectory.put(resourceId, texture);
 
 	}
 

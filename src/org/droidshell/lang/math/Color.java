@@ -152,13 +152,12 @@ public class Color implements Cloneable {
 		try {
 			Color rgba = (Color) o;
 
-			if (Float.compare(rgba.r, r) == 0
+			boolean comp = Float.compare(rgba.r, r) == 0
 					&& Float.compare(rgba.g, g) == 0
 					&& Float.compare(rgba.b, b) == 0
-					&& Float.compare(rgba.a, a) == 0)
-				return true;
-			else
-				return false;
+					&& Float.compare(rgba.a, a) == 0;
+			
+			return comp;
 
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage());

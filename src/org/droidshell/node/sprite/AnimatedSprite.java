@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 
 import org.droidshell.lang.math.Color;
 import org.droidshell.lang.math.Vector2D;
-import org.droidshell.opengl.vertexbuffer.VertexBufferDirectory;
+import org.droidshell.opengl.vertexbuffer.VertexBuffer;
 import org.droidshell.opengl.vertexbuffer.VertexBufferFactory;
 
 import android.opengl.GLES20;
@@ -20,15 +20,17 @@ public class AnimatedSprite extends Sprite {
 
 	private static final String TAG = AnimatedSprite.class.getName();
 
+	private float[] textureArray = new float[8];
+
 	public Vector2D dimension;
 	public int frameNumber;
-	public int currentRow = 0;
-	public int currentColumn = 0;
-	public int currentFrame = 0;
+	public int currentRow;
+	public int currentColumn;
+	public int currentFrame;
 	public long lastFrameUpdateTime;
 	public long framePeriod;
-	
-	public long animationTime = 0;
+
+	public long animationTime;
 
 	public AnimatedSprite(Vector2D dimension, int frameNumber, int fPS,
 			float width, float height, int textureId) {
@@ -36,8 +38,14 @@ public class AnimatedSprite extends Sprite {
 
 		this.dimension = dimension;
 		this.frameNumber = frameNumber;
-		this.lastFrameUpdateTime = System.currentTimeMillis();
-		this.framePeriod = 1000 / fPS;
+		currentRow = 0;
+		currentColumn = 0;
+		currentFrame = 0;
+		lastFrameUpdateTime = 0;
+		framePeriod = 1000 / fPS;
+		animationTime = 0;
+
+		createTextureBuffer();
 	}
 
 	public AnimatedSprite(Vector2D center, Vector2D dimension, int frameNumber,
@@ -46,8 +54,14 @@ public class AnimatedSprite extends Sprite {
 
 		this.dimension = dimension;
 		this.frameNumber = frameNumber;
-		this.lastFrameUpdateTime = System.currentTimeMillis();
-		this.framePeriod = 1000 / fPS;
+		currentRow = 0;
+		currentColumn = 0;
+		currentFrame = 0;
+		lastFrameUpdateTime = 0;
+		framePeriod = 1000 / fPS;
+		animationTime = 0;
+
+		createTextureBuffer();
 	}
 
 	public AnimatedSprite(Vector2D dimension, int frameNumber, int fPS,
@@ -56,8 +70,14 @@ public class AnimatedSprite extends Sprite {
 
 		this.dimension = dimension;
 		this.frameNumber = frameNumber;
-		this.lastFrameUpdateTime = System.currentTimeMillis();
-		this.framePeriod = 1000 / fPS;
+		currentRow = 0;
+		currentColumn = 0;
+		currentFrame = 0;
+		lastFrameUpdateTime = 0;
+		framePeriod = 1000 / fPS;
+		animationTime = 0;
+
+		createTextureBuffer();
 	}
 
 	public AnimatedSprite(Vector2D center, Vector2D dimension, int frameNumber,
@@ -66,8 +86,14 @@ public class AnimatedSprite extends Sprite {
 
 		this.dimension = dimension;
 		this.frameNumber = frameNumber;
-		this.lastFrameUpdateTime = System.currentTimeMillis();
-		this.framePeriod = 1000 / fPS;
+		currentRow = 0;
+		currentColumn = 0;
+		currentFrame = 0;
+		lastFrameUpdateTime = 0;
+		framePeriod = 1000 / fPS;
+		animationTime = 0;
+
+		createTextureBuffer();
 	}
 
 	private float[] createTextureArray() {
@@ -78,30 +104,42 @@ public class AnimatedSprite extends Sprite {
 		float dx = 1.0f / dimension.x;
 		float dy = 1.0f / dimension.y;
 
-		float[] textureArray = new float[] { x, y - dy, x + dx, y - dy, x, y,
-				x + dx, y };
+		textureArray[0] = x;
+		textureArray[1] = y - dy;
+		textureArray[2] = x + dx;
+		textureArray[3] = y - dy;
+		textureArray[4] = x;
+		textureArray[5] = y;
+		textureArray[6] = x + dx;
+		textureArray[7] = y;
 
 		return textureArray;
 	}
 
 	private void createTextureBuffer() {
-		String vbId = "TEXTURE" + ":" + "ANIM";
+		String vbId = "TEXTURE" + ":" + "ANIM" + ":" + texture.toString();
 
-		FloatBuffer buffer = this.createBuffer(this.createTextureArray());
+		FloatBuffer buffer = createBuffer(createTextureArray());
+		texcoordBuffer = new VertexBuffer(buffer, 2, GLES20.GL_FLOAT, true);
 
 		try {
-			VertexBufferFactory.build(vbId, buffer, 2, GLES20.GL_FLOAT, true);
+			VertexBufferFactory.build(vbId, texcoordBuffer);
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 		}
-
-		texcoordBuffer = VertexBufferDirectory.get(vbId);
 	}
 
-	public void update(long gameTime) {
+	private void updateTexureCoordinates(float[] array) {
+
+		texcoordBuffer.buffer.put(array);
+		texcoordBuffer.buffer.position(0);
+
+	}
+
+	public void onUpdate(long gameTime) {
 
 		animationTime += gameTime;
-		
+
 		if (animationTime > lastFrameUpdateTime + framePeriod) {
 
 			lastFrameUpdateTime = animationTime;
@@ -123,8 +161,13 @@ public class AnimatedSprite extends Sprite {
 
 		}
 
-		this.createTextureBuffer();
+		updateTexureCoordinates(createTextureArray());
 
+	}
+
+	@Override
+	public AnimatedSprite clone() {
+		return (AnimatedSprite) super.clone();
 	}
 
 }
