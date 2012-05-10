@@ -1,6 +1,7 @@
 package org.droidshell.engine.scene;
 
 import org.droidshell.engine.render.RenderContext;
+import org.droidshell.engine.scene.background.LoopingBackground;
 import org.droidshell.engine.scene.background.SpriteBackground;
 import org.droidshell.node.Node;
 import org.droidshell.node.NodeList;
@@ -14,7 +15,8 @@ import org.droidshell.node.interfaces.iRenderable;
  */
 public class Scene implements iRenderable {
 
-	public SpriteBackground background;
+	public LoopingBackground background;
+//	public SpriteBackground background;
 	public NodeList<Node> nodeList;
 
 	/**
@@ -34,8 +36,13 @@ public class Scene implements iRenderable {
 	 * SpriteBackground}
 	 * 
 	 */
+	
+//	public Scene(SpriteBackground background) {
+//		this.background = background;
+//		this.nodeList = new NodeList<Node>();
+//	}
 
-	public Scene(SpriteBackground background) {
+	public Scene(LoopingBackground background) {
 		this.background = background;
 		this.nodeList = new NodeList<Node>();
 	}

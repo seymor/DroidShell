@@ -25,7 +25,7 @@ public class Sprite extends Rectangle {
 
 	private static final String TAG = Sprite.class.getName();
 
-	protected VertexBuffer texcoordBuffer;
+	public VertexBuffer texcoordBuffer;
 
 	public Texture texture;
 
@@ -80,6 +80,12 @@ public class Sprite extends Rectangle {
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 		}
+	}
+	
+	@Override
+	public void onUpdate(long gameTime) {
+		super.onUpdate(gameTime);
+		
 	}
 
 	@Override

@@ -15,8 +15,12 @@ public final class R {
         public static final int biz=0x7f020001;
         public static final int icon=0x7f020002;
         public static final int logo=0x7f020003;
-        public static final int splash=0x7f020004;
-        public static final int walk=0x7f020005;
+        public static final int rpbg=0x7f020004;
+        public static final int smoke=0x7f020005;
+        public static final int splash=0x7f020006;
+        public static final int star=0x7f020007;
+        public static final int uw=0x7f020008;
+        public static final int walk=0x7f020009;
     }
     public static final class layout {
         public static final int main=0x7f030000;

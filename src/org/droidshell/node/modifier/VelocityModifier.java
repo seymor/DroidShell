@@ -27,7 +27,6 @@ public class VelocityModifier implements iNodeModifier {
 
 	public void onUpdate(Node node, long gameTime) {
 		movingTime += gameTime;
-		node.modelMatrix.loadIdentity();
 		Vector2D.multiply(displacement, velocity, movingTime);
 		node.onTranslate(displacement.x, displacement.y);
 	}

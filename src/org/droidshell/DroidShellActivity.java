@@ -19,7 +19,7 @@ public class DroidShellActivity extends Activity {
 
 		ScreenManager.fullScreen();
 		ScreenManager.ignoreOrientationChanges();
-		ScreenManager.setOrientation(ScreenManager.PORTRAIT);
+		ScreenManager.setOrientation(ScreenManager.LANDSCAPE);
 		engineView = new EngineView(engine);
 
 		setContentView(engineView);

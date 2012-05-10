@@ -157,6 +157,13 @@ public class Vector2D implements Cloneable {
 
 		return resultVector;
 	}
+	
+	public static Vector2D add(Vector2D resultVector, Vector2D v1, Vector3D v2) {
+		resultVector.x = v1.x + v2.x;
+		resultVector.y = v1.y + v2.y;
+
+		return resultVector;
+	}
 
 	public static Vector2D subtract(Vector2D resultVector, Vector2D v1,
 			Vector2D v2) {

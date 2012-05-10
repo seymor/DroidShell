@@ -42,6 +42,12 @@ public class NodeList<T extends Node> extends ArrayList<T> {
 		add(object);
 		return this;
 	}
+	
+	public NodeList<T> pushList(ArrayList<T> list) {
+		for(int i = 0; i < list.size(); i++)
+			add(list.get(i));
+		return this;
+	}
 
 	public void onUpdate(long gameTime) {
 		for (int i = 0; i < size(); i++) {

@@ -20,7 +20,7 @@ public class AnimatedSprite extends Sprite {
 
 	private static final String TAG = AnimatedSprite.class.getName();
 
-	private float[] textureArray = new float[8];
+	protected float[] textureArray = new float[8];
 
 	public Vector2D dimension;
 	public int frameNumber;
@@ -31,6 +31,7 @@ public class AnimatedSprite extends Sprite {
 	public long framePeriod;
 
 	public long animationTime;
+	public boolean isAnimated;
 
 	public AnimatedSprite(Vector2D dimension, int frameNumber, int fPS,
 			float width, float height, int textureId) {
@@ -44,6 +45,7 @@ public class AnimatedSprite extends Sprite {
 		lastFrameUpdateTime = 0;
 		framePeriod = 1000 / fPS;
 		animationTime = 0;
+		isAnimated = true;
 
 		createTextureBuffer();
 	}
@@ -129,7 +131,7 @@ public class AnimatedSprite extends Sprite {
 		}
 	}
 
-	private void updateTexureCoordinates(float[] array) {
+	protected void updateTexureCoordinates(float[] array) {
 
 		texcoordBuffer.buffer.put(array);
 		texcoordBuffer.buffer.position(0);
@@ -137,31 +139,35 @@ public class AnimatedSprite extends Sprite {
 	}
 
 	public void onUpdate(long gameTime) {
-
-		animationTime += gameTime;
-
-		if (animationTime > lastFrameUpdateTime + framePeriod) {
-
-			lastFrameUpdateTime = animationTime;
-
-			currentColumn++;
-
-			if (currentColumn == (int) dimension.x) {
-				currentRow++;
-				currentColumn = 0;
+		super.onUpdate(gameTime);
+		
+		if(isAnimated) {
+			animationTime += gameTime;
+	
+			if (animationTime > lastFrameUpdateTime + framePeriod) {
+	
+				lastFrameUpdateTime = animationTime;
+	
+				currentColumn++;
+	
+				if (currentColumn == (int) dimension.x) {
+					currentRow++;
+					currentColumn = 0;
+				}
+	
+				currentFrame++;
+	
+				if (currentFrame == frameNumber) {
+					currentFrame = 0;
+					currentRow = 0;
+					currentColumn = 0;
+				}
+	
 			}
-
-			currentFrame++;
-
-			if (currentFrame == frameNumber) {
-				currentFrame = 0;
-				currentRow = 0;
-				currentColumn = 0;
-			}
-
-		}
+		
 
 		updateTexureCoordinates(createTextureArray());
+		}
 
 	}
 

@@ -20,7 +20,7 @@ public class Camera {
 
 	private static final String TAG = Camera.class.getName();
 
-	private Vector2D worldCoordinates;
+	protected Vector2D worldCoordinates;
 
 	public float screenWidth;
 	public float screenHeight;

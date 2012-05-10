@@ -1,8 +1,8 @@
 package org.droidshell.node.particle;
 
-import org.droidshell.lang.math.Math;
 import org.droidshell.lang.math.Vector2D;
 import org.droidshell.node.Node;
+import org.droidshell.node.particle.emitter.ParticleEmitter;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -12,39 +12,41 @@ import org.droidshell.node.Node;
  */
 public class Particle<T extends Node> {
 
-	public long actualAge;
-	public long maxAge;
+	private Vector2D tempPosition;
+
+	public int actualAge;
 	public boolean isDead = false;
 
-	public Vector2D velocity;
-	public Vector2D position;
+	public ParticleEmitter particleEmitter;
 
 	public T node;
 
-	public Particle(T node, long maxAge) {
+	public Particle(T node, ParticleEmitter particleEmitter) {
 		this.node = node;
-		this.maxAge = maxAge;
-		position = new Vector2D(0, 0);
-		velocity = new Vector2D(0, 0);
+		this.particleEmitter = particleEmitter;
+		tempPosition = new Vector2D();
 		reborn();
 	}
 
-	public void update(long gameTime) {
+	public void onUpdate(long gameTime) {
 		if (!isDead) {
-			position.add(velocity.multiply(gameTime));
+			Vector2D.add(particleEmitter.position, particleEmitter.position,
+					Vector2D.multiply(tempPosition, particleEmitter.velocity,
+							gameTime / 1000.0f));
 			actualAge += gameTime;
-			node.onTranslate(position.x, position.y);
+			node.resetPosition();
+			node.onTranslate(particleEmitter.position.x,
+					particleEmitter.position.y);
 			node.onUpdate(gameTime);
 		}
 
-		if (actualAge >= maxAge && !isDead)
+		if (actualAge >= particleEmitter.age && !isDead)
 			reborn();
 	}
 
 	public void reborn() {
-		position.setAll(0);
-		velocity.set(Math.generateRandomFloat(0, 0.01f),
-				Math.generateRandomFloat(0, 0.01f));
+		actualAge = 0;
+		particleEmitter.reborn();
 	}
 
 }

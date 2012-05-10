@@ -31,8 +31,8 @@ public class Rectangle extends Node {
 
 	private static final String TAG = Rectangle.class.getName();
 
-	protected VertexBuffer positionBuffer;
-	protected VertexBuffer colorBuffer;
+	public VertexBuffer positionBuffer;
+	public VertexBuffer colorBuffer;
 
 	public float width;
 	public float height;

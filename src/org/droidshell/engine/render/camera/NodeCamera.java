@@ -4,6 +4,7 @@ import org.droidshell.lang.math.Matrix;
 import org.droidshell.lang.math.Vector2D;
 import org.droidshell.lang.math.Vector3D;
 import org.droidshell.node.Node;
+import org.droidshell.screen.ScreenManager;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -58,6 +59,21 @@ public class NodeCamera extends Camera {
 		center.x = oCenter.x;
 		center.y = oCenter.y;
 		center.z = oCenter.z;
+	}
+	
+	@Override
+	public Vector2D convertScreenToWorldCoordinates(float x, float y) {
+
+		final float tx = x - ScreenManager.width / 2.0f;
+		final float ty = y - ScreenManager.height / 2.0f;
+
+		worldCoordinates.x = tx * (screenWidth / ScreenManager.width);
+		worldCoordinates.y = ty * (screenHeight / ScreenManager.height) * (-1);
+		
+		Vector2D.add(worldCoordinates, worldCoordinates, center);
+		
+		return worldCoordinates;
+
 	}
 
 	/**

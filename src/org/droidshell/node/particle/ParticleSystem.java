@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.droidshell.engine.render.RenderContext;
 import org.droidshell.node.Node;
-import org.droidshell.node.particle.emitter.iParticleEmitter;
+import org.droidshell.node.particle.emitter.ParticleEmitter;
 import org.droidshell.node.particle.modifier.iParticleModifier;
 
 /**
@@ -17,22 +17,22 @@ public class ParticleSystem<T extends Node> extends Node {
 
 	public Particle<T>[] particles;
 	
-	public iParticleEmitter particleEmitter;
+	public ParticleEmitter particleEmitter;
 	public ArrayList<iParticleModifier<T>> particleModifierList;
 	
 	@SuppressWarnings("unchecked")
-	public ParticleSystem(int particleCount, T node, iParticleEmitter particleEmitter) {
+	public ParticleSystem(int particleCount, T node, ParticleEmitter particleEmitter) {
 		particles = (Particle<T>[]) new Particle[particleCount];
 		this.particleEmitter = particleEmitter;
 		
 		for(int i = 0; i < particleCount; i++) {
-			particles[i] = new Particle<T>((T)node.clone(), 1000);
+			particles[i] = new Particle<T>((T)node.clone(), particleEmitter.clone());
 		}
 		
 		particleModifierList = new ArrayList<iParticleModifier<T>>();
 	}
 	
-	public ParticleSystem(Particle<T>[] particles, iParticleEmitter particleEmitter) {
+	public ParticleSystem(Particle<T>[] particles, ParticleEmitter particleEmitter) {
 		this.particles = particles;
 		this.particleEmitter = particleEmitter;
 		
@@ -48,7 +48,7 @@ public class ParticleSystem<T extends Node> extends Node {
 	
 	public void onUpdate(long gameTime) {
 		for(int i = 0; i < particles.length; i++)
-			particles[i].update(gameTime);
+			particles[i].onUpdate(gameTime);
 	}
 	
 	public void onRender(RenderContext renderContext) {

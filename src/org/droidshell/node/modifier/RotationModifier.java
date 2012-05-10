@@ -23,8 +23,8 @@ public class RotationModifier implements iNodeModifier {
 
 	public void onUpdate(Node node, long gameTime) {
 		rotationTime += gameTime;
-		// TODO modelMatrix identity if derz no translation before it
-		node.onRotate(angleDeg * rotationTime);
+		//node.modelMatrix.loadIdentity();
+		node.onRotate(angleDeg * rotationTime/1000);
 	}
 
 }

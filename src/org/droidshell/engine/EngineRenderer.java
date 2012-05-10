@@ -7,6 +7,7 @@ import org.droidshell.R;
 import org.droidshell.engine.render.RenderContext;
 import org.droidshell.engine.render.camera.Camera;
 import org.droidshell.engine.render.camera.NodeCamera;
+import org.droidshell.engine.scene.background.LoopingBackground;
 import org.droidshell.engine.scene.background.SpriteBackground;
 import org.droidshell.exception.EngineException;
 import org.droidshell.input.touch.TouchController;
@@ -16,8 +17,11 @@ import org.droidshell.lang.math.Vector2D;
 import org.droidshell.lang.math.Vector3D;
 import org.droidshell.music.MusicFactory;
 import org.droidshell.music.MusicLibrary;
+import org.droidshell.node.modifier.JumpModifier;
 import org.droidshell.node.modifier.VelocityModifier;
 import org.droidshell.node.modifier.RotationModifier;
+import org.droidshell.node.particle.ParticleSystem;
+import org.droidshell.node.particle.emitter.ParticleEmitter;
 import org.droidshell.node.sprite.AnimatedSprite;
 import org.droidshell.node.sprite.Sprite;
 import org.droidshell.opengl.GLStateManager;
@@ -28,6 +32,14 @@ import org.droidshell.opengl.shader.program.ShaderProgramFactory;
 import org.droidshell.opengl.shader.program.input.ShaderProgramInput;
 import org.droidshell.opengl.texture.TextureFactory;
 import org.droidshell.screen.ScreenManager;
+import org.droidshell.test.game.Hero;
+import org.droidshell.test.game.JumpHero;
+import org.droidshell.test.game.Smoke;
+import org.droidshell.test.game.SpawnSmoke;
+import org.droidshell.test.game.SpawnStars;
+import org.droidshell.test.game.Star;
+import org.droidshell.test.game.StarList;
+import org.droidshell.test.game.SuperScene;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
@@ -57,20 +69,42 @@ public class EngineRenderer implements Renderer {
 	public void onInit() {
 		lastTick = System.currentTimeMillis();
 
-		TextureFactory.build(R.drawable.bg, TextureFactory.NEAREST,
-				TextureFactory.LINEAR, TextureFactory.CLAMP_TO_EDGE,
-				TextureFactory.CLAMP_TO_EDGE);
+		TextureFactory.build(R.drawable.bg);
 
-		TextureFactory.build(R.drawable.biz, TextureFactory.NEAREST,
-				TextureFactory.LINEAR, TextureFactory.CLAMP_TO_EDGE,
-				TextureFactory.CLAMP_TO_EDGE);
+		TextureFactory.build(R.drawable.uw);
 
-		AnimatedSprite sprite3 = new AnimatedSprite(new Vector2D(27, 1), 27,
-				30, 0.2f, 0.24f, R.drawable.biz);
+		TextureFactory.build(R.drawable.biz);
 
-		NodeCamera cam = new NodeCamera(sprite3, new Vector2D(0.5f, 0),
-				new Vector3D(0, 0, -1), new Vector3D(0, 0, 0), new Vector3D(0,
-						1, 0), 45, 0.001f, 100);
+		TextureFactory.build(R.drawable.star);
+
+		TextureFactory.build(R.drawable.rpbg);
+
+		TextureFactory.build(R.drawable.smoke);
+
+		Sprite smoke = new Sprite(0.5f, 0.5f, new Color(Color.intToNorm(255),
+				Color.intToNorm(193), Color.intToNorm(193)), R.drawable.smoke);
+
+		Smoke szmok = new Smoke(smoke);
+
+		AnimatedSprite sprite = new AnimatedSprite(new Vector2D(27, 1), 27, 30,
+				0.1f, 0.12f, R.drawable.biz);
+
+		Hero hero = new Hero(sprite, new Vector2D(0.1f, 0));
+
+		SuperScene sc = new SuperScene();
+		engine.scene = sc;
+		sc.hero = hero;
+
+		SpawnSmoke sps = new SpawnSmoke(szmok, sc, engine);
+
+		sc.smoke = szmok;
+
+//		Camera cam = new Camera(new Vector3D(0, 0, -1), new Vector3D(0, 0, 0),
+//				new Vector3D(0, 1, 0), 45, 0.001f, 100);
+
+		 NodeCamera cam = new NodeCamera(hero.sprite, new Vector2D(0.5f,0),
+		 new Vector3D(0, 0, -1), new Vector3D(0, 0, 0), new Vector3D(0,
+		 1, 0), 45, 0.001f, 100);
 
 		ShaderFactory.build(R.raw.test_vs, ShaderFactory.VERTEX_SHADER);
 		ShaderFactory.build(R.raw.test_fs, ShaderFactory.FRAGMENT_SHADER);
@@ -91,14 +125,22 @@ public class EngineRenderer implements Renderer {
 		sI.bindUniform(sI.UNIFORM_TEXTURE_SAMPLER, "uTextureSampler");
 
 		prog.use();
-		
-		engine.touchController.camera = cam;
 
-		engine.scene.background = new SpriteBackground(cam, R.drawable.bg);
+		SpawnStars ss = new SpawnStars(sc, engine);
+		JumpModifier jm = new JumpModifier(hero, 1, new Vector2D(0.0002f, 0.5f));
+		hero.sprite.modifierList.add(jm);
+		JumpHero jh = new JumpHero(jm);
 
-		sprite3.zIndex = 5;
+		engine.touchController.flingEvents.add(jh);
+		engine.touchController.longPressEvents.add(sps);
+		engine.touchController.doubleTapEvents.add(ss);
 
-		engine.scene.nodeList.push(sprite3);
+//		engine.scene.background = new SpriteBackground(cam, R.drawable.bg);
+
+		 engine.scene.background = new LoopingBackground(new Vector2D(640, 1),
+		 640, 24, cam, R.drawable.rpbg);
+
+		// engine.scene.nodeList.push(ps);
 
 		MusicFactory.build(R.raw.supermario);
 		MusicLibrary.get(R.raw.supermario).play();
@@ -140,7 +182,7 @@ public class EngineRenderer implements Renderer {
 		dt = System.currentTimeMillis() - lastTick;
 		count += dt;
 		if (count > 1000) {
-			// Log.d(TAG, Long.toString(fps--));
+			Log.d(TAG, Long.toString(fps--));
 			fps = 0;
 			count = 0;
 		}

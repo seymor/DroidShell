@@ -3,6 +3,7 @@ package org.droidshell.lang.math;
 import java.util.Random;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 /**
  * (c) 2012 Zsolt Vad
@@ -12,6 +13,7 @@ import android.util.FloatMath;
  */
 public class Math {
 
+	private static final String TAG = Math.class.getName();
 	private static final Random randomGenerator = new Random();
 
 	public static final float EPSILON = 0.0000001f;
@@ -32,7 +34,12 @@ public class Math {
 	 */
 
 	public static final int generateRandomInteger(int minInt, int maxInt) {
-		return randomGenerator.nextInt(maxInt - minInt) + minInt;
+		try {
+			return randomGenerator.nextInt(maxInt - minInt) + minInt;
+		}catch(IllegalArgumentException e) {
+			Log.d(TAG, e.getMessage());
+		}
+		return maxInt;
 	}
 
 	/**

@@ -2,7 +2,6 @@ package org.droidshell.input.touch;
 
 import java.util.ArrayList;
 
-import org.droidshell.engine.render.camera.Camera;
 import org.droidshell.input.touch.handler.iDoubleTapEventHandler;
 import org.droidshell.input.touch.handler.iDownEventHandler;
 import org.droidshell.input.touch.handler.iFlingEventHandler;
@@ -10,7 +9,6 @@ import org.droidshell.input.touch.handler.iLongPressEventHandler;
 import org.droidshell.input.touch.handler.iScrollEventHandler;
 import org.droidshell.input.touch.handler.iShowPressEventHandler;
 import org.droidshell.input.touch.handler.iSingleTapUpEventHandler;
-import org.droidshell.lang.math.Vector2D;
 
 import android.content.Context;
 import android.util.Log;
@@ -39,7 +37,6 @@ public class TouchController implements OnGestureListener, OnTouchListener,
 	public static final int ACTION_OUTSIDE = MotionEvent.ACTION_OUTSIDE;
 
 	private Context context;
-	public Camera camera;
 	public GestureDetector gestureDetector;
 
 	public ArrayList<iDownEventHandler> downEvents;
@@ -68,14 +65,6 @@ public class TouchController implements OnGestureListener, OnTouchListener,
 	}
 
 	public boolean onTouch(View vUnused, MotionEvent e) {
-		if (camera != null) {
-			Vector2D v = camera.convertScreenToWorldCoordinates(e.getX(),
-					e.getY());
-			Log.d(TAG,
-					"onTouch: " + String.valueOf(v.x) + ":"
-							+ String.valueOf(v.y));
-		}
-
 		return gestureDetector.onTouchEvent(e);
 	}
 
@@ -97,7 +86,7 @@ public class TouchController implements OnGestureListener, OnTouchListener,
 	public void onLongPress(MotionEvent e) {
 		for (int i = 0; i < longPressEvents.size(); i++)
 			longPressEvents.get(i).onHandleEvent(e);
-		Log.d(TAG, "onLongPress");
+//		Log.d(TAG, "onLongPress");
 	}
 
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
@@ -111,13 +100,13 @@ public class TouchController implements OnGestureListener, OnTouchListener,
 	public void onShowPress(MotionEvent e) {
 		for (int i = 0; i < showPressEvents.size(); i++)
 			showPressEvents.get(i).onHandleEvent(e);
-		Log.d(TAG, "onShowPress");
+//		Log.d(TAG, "onShowPress");
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
 		for (int i = 0; i < singleTapUpEvents.size(); i++)
 			singleTapUpEvents.get(i).onHandleEvent(e);
-		Log.d(TAG, "onSingleTapUp");
+//		Log.d(TAG, "onSingleTapUp");
 		return false;
 	}
 
@@ -130,13 +119,13 @@ public class TouchController implements OnGestureListener, OnTouchListener,
 
 	public boolean onDoubleTapEvent(MotionEvent e) {
 		// TODO what's this???
-		Log.d(TAG, "onDoubleTapEvent");
+//		Log.d(TAG, "onDoubleTapEvent");
 		return false;
 	}
 
 	public boolean onSingleTapConfirmed(MotionEvent e) {
 		// TODO what's this???
-		Log.d(TAG, "onSingleTapConfirmed");
+//		Log.d(TAG, "onSingleTapConfirmed");
 		return false;
 	}
 

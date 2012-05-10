@@ -58,5 +58,33 @@ public class TextureFactory {
 		TextureDirectory.put(resourceId, texture);
 
 	}
+	
+	public static void build(final int resourceId) {
+		if (context == null)
+			throw new ClassNotInitializedException("Context not set!");
+
+		int[] textureArrayId = new int[1];
+
+		GLES20.glGenTextures(1, textureArrayId, 0);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureArrayId[0]);		
+		
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+				GLES20.GL_TEXTURE_MIN_FILTER, TextureFactory.NEAREST);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+				GLES20.GL_TEXTURE_MAG_FILTER, TextureFactory.LINEAR);
+
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
+				TextureFactory.CLAMP_TO_EDGE);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
+				TextureFactory.CLAMP_TO_EDGE);
+
+		Texture texture = new Texture(BitmapFactory.decodeResource(
+				context.getResources(), resourceId), textureArrayId[0]);
+
+		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, texture.bitmap, 0);
+
+		TextureDirectory.put(resourceId, texture);
+
+	}
 
 }

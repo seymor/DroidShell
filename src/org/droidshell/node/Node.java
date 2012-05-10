@@ -93,7 +93,9 @@ public abstract class Node implements iUpdatable, iRenderable, iTransformable,
 	@Override
 	public Node clone() {
 		try {
-			return (Node) super.clone();
+			Node node = (Node) super.clone();
+			node.modelMatrix = Matrix.identityMatrix();
+			return node;
 		} catch (CloneNotSupportedException e) {
 			Log.e(TAG, e.getMessage());
 		}

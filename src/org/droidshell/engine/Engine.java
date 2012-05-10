@@ -3,6 +3,7 @@ package org.droidshell.engine;
 import org.droidshell.engine.render.RenderContext;
 import org.droidshell.engine.scene.Scene;
 import org.droidshell.exception.EngineException;
+import org.droidshell.input.sensor.SensorController;
 import org.droidshell.input.touch.TouchController;
 import org.droidshell.music.MusicFactory;
 import org.droidshell.opengl.shader.ShaderFactory;
@@ -31,6 +32,7 @@ public class Engine {
 	public Scene scene;
 
 	public TouchController touchController;
+	public SensorController sensorController;
 
 	public long lastTick;
 
@@ -47,6 +49,7 @@ public class Engine {
 
 		scene = new Scene();
 		touchController = new TouchController(activity);
+		sensorController = new SensorController(activity);
 		isRunning = false;
 
 	}
